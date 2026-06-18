@@ -2,7 +2,7 @@
 
 \subsection{Fuente, población y muestra}
 
-La fuente de datos fue Yahoo Finance, accedida originalmente mediante la biblioteca \texttt{yfinance}. Como no se utilizó una cotización directa UYU/BRL, se descargaron dos series de precios de cierre diarios: \texttt{USDUYU=X}, que representa pesos uruguayos por dólar estadounidense, y \texttt{USDBRL=X}, que representa reales brasileños por dólar estadounidense. El dólar estadounidense se utilizó como moneda puente para construir la cotización cruzada:
+La fuente de datos fue Yahoo Finance, accedida originalmente mediante la biblioteca \texttt{yfinance} \cite{yahoo_finance,yfinance}. Como no se utilizó una cotización directa UYU/BRL, se descargaron dos series de precios de cierre diarios: \texttt{USDUYU=X}, que representa pesos uruguayos por dólar estadounidense, y \texttt{USDBRL=X}, que representa reales brasileños por dólar estadounidense. El dólar estadounidense se utilizó como moneda puente para construir la cotización cruzada:
 
 \[
     \text{UYU/BRL} = \frac{\text{UYU/USD}}{\text{BRL/USD}}.
@@ -37,4 +37,3 @@ El análisis se desarrolló con Python, \texttt{pandas}, \texttt{numpy}, \texttt
 La inferencia se construyó tomando como referencia las distribuciones muestrales de estadísticos vistas en el curso \cite{curso_muestreo}. Se calcularon intervalos de confianza para media y varianza, comparando el enfoque clásico con un intervalo bootstrap para la media. Para el ajuste de distribuciones se compararon modelos continuos positivos o de uso frecuente, y se aplicaron pruebas de bondad de ajuste, incluyendo chi-cuadrado según el enfoque de frecuencias observadas y esperadas \cite{curso_bondad}.
 
 Las principales limitaciones son la posible dependencia temporal, la no estacionariedad, cambios de comportamiento económico dentro del período y el hecho de que \texttt{uyu\_por\_brl} se construye algebraicamente a partir de \texttt{uyu\_por\_usd} y \texttt{brl\_por\_usd}. Por tanto, las asociaciones observadas no deben interpretarse como causalidad.
-

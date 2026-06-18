@@ -13,7 +13,22 @@ Para la cotización UYU/BRL y los log-retornos se planteó:
     H_1: \text{los datos no provienen de una distribución Normal}.
 \]
 
-\input{../outputs/tables/normalidad.tex}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Síntesis de pruebas de hipótesis principales.}
+\label{tab:hipotesis-compacta}
+\begin{tabular}{p{3.8cm}p{4.2cm}p{4.6cm}}
+\toprule
+Prueba & Resultado clave & Decisión con \(\alpha=0.05\) \\
+\midrule
+Normalidad UYU/BRL & \(p < 0.001\) & Se rechaza \(H_0\) \\
+Normalidad log-retornos & \(p < 0.001\) & Se rechaza \(H_0\) \\
+Correlación BRL/USD--UYU/USD & \(r=0.9819\), \(p<0.001\) & Se rechaza \(H_0:\rho=0\) \\
+ACF log-retornos lag 1 & \(\rho_1=-0.1917\) & Evidencia de dependencia lineal \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Cuando el p-value es menor o igual que \(\alpha\), se rechaza \(H_0\). Si el p-value es mayor, no se rechaza \(H_0\); esto no significa aceptar que la normalidad sea verdadera, sino reconocer que no existe evidencia suficiente para rechazarla con ese criterio. En muestras grandes, incluso diferencias pequeñas pueden producir p-values muy bajos.
 
@@ -28,11 +43,9 @@ Se evaluaron correlaciones de Pearson entre variables cambiarias. Para cada par 
     H_1: \rho \neq 0.
 \]
 
-\input{../outputs/tables/correlaciones.tex}
-
 La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrBrlUsdUyuUsd{}. Este resultado describe asociación lineal en el período observado, pero no demuestra causalidad. Además, \texttt{uyu\_por\_brl} se construye algebraicamente a partir de ambas cotizaciones base, por lo que no corresponde interpretar esas variables como predictores independientes en sentido causal.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}{0.48\textwidth}
         \includegraphics[width=\textwidth]{scatter_brl_usd_vs_uyu_usd.png}
@@ -60,7 +73,4 @@ Para evaluar dependencia temporal se calcularon autocorrelaciones de los log-ret
     H_1: \rho_k \neq 0.
 \]
 
-\input{../outputs/tables/autocorrelacion_log_retornos.tex}
-
 La autocorrelación permite distinguir entre el comportamiento del nivel de una cotización y el comportamiento de sus retornos. Una autocorrelación alta en niveles no implica necesariamente la misma estructura en retornos. En esta versión no se implementó la prueba Ljung-Box, por lo que queda como mejora posterior para evaluar autocorrelación conjunta hasta varios rezagos.
-

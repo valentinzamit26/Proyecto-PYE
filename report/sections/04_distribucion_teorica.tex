@@ -4,7 +4,7 @@ En el curso, una variable aleatoria continua se describe mediante una función d
 
 La distribución empírica se observó primero mediante histogramas y Q-Q plots. El histograma permite mirar frecuencias por clases; el Q-Q plot permite comparar cuantiles observados contra cuantiles teóricos. Sin embargo, al tratarse de una serie temporal, ajustar una distribución a los valores marginales no modela automáticamente la dependencia temporal.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}{0.48\textwidth}
         \includegraphics[width=\textwidth]{qq_uyu_por_brl.png}
@@ -21,7 +21,21 @@ La distribución empírica se observó primero mediante histogramas y Q-Q plots.
     \label{fig:modelado-visual}
 \end{figure}
 
-\input{../outputs/tables/bondad_ajuste_uyu_por_brl.tex}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Bondad de ajuste de distribuciones candidatas para UYU/BRL.}
+\label{tab:bondad-compacta}
+\begin{tabular}{lrr}
+\toprule
+Distribución & KS & \(p\)-value KS \\
+\midrule
+Log-normal & 0.0763 & \(6.90\times10^{-27}\) \\
+Gamma & 0.0866 & \(1.54\times10^{-34}\) \\
+Normal & 0.1064 & \(5.67\times10^{-52}\) \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Como complemento, se aplicó una prueba chi-cuadrado de bondad de ajuste. Según el material del curso, este procedimiento compara frecuencias observadas con frecuencias esperadas por clase y utiliza un estadístico de la forma:
 
@@ -31,7 +45,4 @@ Como complemento, se aplicó una prueba chi-cuadrado de bondad de ajuste. Según
 
 donde \(O_k\) es la frecuencia observada y \(T_k\) la frecuencia teórica esperada en la clase \(k\). La prueba requiere que las frecuencias esperadas sean suficientemente grandes; el curso señala como referencia que sean mayores o iguales a 5 \cite{curso_bondad}.
 
-\input{../outputs/tables/bondad_ajuste_chi2_uyu_por_brl.tex}
-
-Según el criterio KS, la mejor distribución relativa entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable, aunque con p-value \MejorDistribucionChiP{}. Por lo tanto, la evidencia no permite afirmar que la distribución sea exacta; solamente indica qué modelo presenta mejor desempeño relativo entre los evaluados.
-
+Según el criterio KS, la mejor distribución relativa entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable, aunque con p-value \MejorDistribucionChiP{}. Por lo tanto, la evidencia no permite afirmar que la distribución sea exacta; solamente indica qué modelo presenta mejor desempeño relativo entre los evaluados. Los resultados completos de chi-cuadrado quedan en \texttt{outputs/tables/}.
