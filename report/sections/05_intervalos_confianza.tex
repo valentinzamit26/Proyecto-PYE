@@ -10,8 +10,6 @@ Para la media, con varianza poblacional desconocida, se utilizó el intervalo ba
 
 donde \(\bar{x}\) es la media muestral, \(s\) el desvío estándar muestral y \(n\) el tamaño de muestra.
 
-\input{../outputs/tables/ic_media_uyu_por_brl.tex}
-
 Para la varianza, bajo supuesto de normalidad e independencia, se utiliza la distribución chi-cuadrado:
 
 \[
@@ -21,9 +19,21 @@ Para la varianza, bajo supuesto de normalidad e independencia, se utiliza la dis
     \right).
 \]
 
-\input{../outputs/tables/ic_varianza_uyu_por_brl.tex}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Intervalos de confianza para media y varianza de UYU/BRL.}
+\label{tab:intervalos-compactos}
+\begin{tabular}{p{2.4cm}p{3.5cm}p{3.5cm}p{3.5cm}}
+\toprule
+Parámetro & 90\% & 95\% & 99\% \\
+\midrule
+Media & [9.1747; 9.2443] & [9.1680; 9.2510] & [9.1550; 9.2640] \\
+Varianza & [2.2655; 2.4162] & [2.2517; 2.4313] & [2.2252; 2.4612] \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Al aumentar el nivel de confianza, aumenta la amplitud del intervalo. Esto ocurre porque el procedimiento exige un rango más amplio de valores compatibles con el parámetro. La interpretación correcta no es que exista una probabilidad del 95\% de que el parámetro fijo esté dentro del intervalo ya calculado, sino que el método produce intervalos que, en repeticiones del muestreo bajo sus supuestos, cubren el parámetro con esa frecuencia aproximada.
 
 También se calculó un intervalo bootstrap percentil al 95\% para la media: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap aporta una alternativa empírica, pero en series temporales el remuestreo simple puede romper la dependencia entre observaciones. Por este motivo, una extensión metodológica más adecuada sería implementar bootstrap por bloques.
-
