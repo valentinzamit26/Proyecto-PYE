@@ -1,0 +1,10 @@
+variable,nulos
+fecha,0
+brl_por_usd,0
+uyu_por_usd,0
+brl_por_uyu,0
+uyu_por_brl,0
+retorno_diario_brl_por_uyu,1
+log_retorno_brl_por_uyu,1
+retorno_diario_uyu_por_brl,1
+log_retorno_uyu_por_brl,1

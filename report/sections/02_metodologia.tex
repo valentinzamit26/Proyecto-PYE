@@ -1,0 +1,26 @@
+\section{Metodología}
+
+La fuente de datos utilizada fue Yahoo Finance, accedida mediante la librería \texttt{yfinance} de Python. Como no se trabajó con una cotización directa UYU/BRL, se descargaron dos series cambiarias: \texttt{USDUYU=X}, que representa pesos uruguayos por dólar estadounidense, y \texttt{USDBRL=X}, que representa reales brasileños por dólar estadounidense. A partir de ambas series se construyó la variable principal:
+
+\[
+    \text{UYU/BRL} = \frac{\text{UYU/USD}}{\text{BRL/USD}}.
+\]
+
+La unidad estadística corresponde a una observación diaria con datos completos para ambas cotizaciones. La población de interés se interpreta como el conjunto de valores posibles del tipo de cambio UYU/BRL durante el período de estudio. La muestra efectiva contiene \TotalRegistros{} registros entre \FechaMinima{} y \FechaMaxima{}.
+
+El archivo original contiene siete columnas: fecha, cotizaciones base frente al dólar, cotización directa construida UYU/BRL, cotización inversa BRL/UYU, retorno diario y log-retorno de la cotización inversa. Durante el procesamiento reproducible se agregaron dos variables derivadas para la cotización principal: \texttt{retorno\_diario\_uyu\_por\_brl} y \texttt{log\_retorno\_uyu\_por\_brl}; por eso las tablas generadas informan \TotalVariables{} variables. Se validó la presencia de las columnas esperadas, se ordenaron las observaciones por fecha y se calcularon valores faltantes. El total de nulos detectado luego de crear retornos fue \NulosTotales{}, correspondientes al primer valor no definido de las series de retornos. No se detectaron fechas duplicadas: \DuplicadosFecha{}.
+
+También se verificó la relación recíproca entre \texttt{uyu\_por\_brl} y \texttt{brl\_por\_uyu}. El máximo error absoluto observado en el producto \(\text{UYU/BRL}\times\text{BRL/UYU}\) fue \MaxErrorProductoInverso{}, lo que confirma que ambas columnas representan la misma relación cambiaria en sentidos inversos.
+
+El análisis se realizó con Python, usando principalmente \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib}, \texttt{seaborn}, \texttt{scipy} y \texttt{statsmodels}. El informe se redactó en LaTeX. La metodología estadística incluyó:
+
+\begin{itemize}
+    \item medidas descriptivas de la cotización UYU/BRL y de los log-retornos;
+    \item histogramas, boxplots, Q-Q plots y gráficos de evolución temporal;
+    \item autocorrelación de log-retornos para diferentes rezagos;
+    \item correlaciones de Pearson entre variables cambiarias;
+    \item comparación de distribuciones Normal, Log-normal y Gamma mediante prueba Kolmogorov-Smirnov;
+    \item intervalos de confianza clásicos para media y varianza, y un intervalo bootstrap para la media.
+\end{itemize}
+
+Una limitación metodológica importante es que la muestra no surge de un muestreo aleatorio simple, sino de una serie histórica observacional. Por lo tanto, la independencia entre observaciones no puede asumirse automáticamente. Además, al tratarse de datos financieros, los resultados deben interpretarse como evidencia descriptiva e inferencial condicionada al período observado, no como una afirmación causal.

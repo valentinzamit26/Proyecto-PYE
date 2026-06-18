@@ -1,0 +1,96 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{xcolor}
+
+\geometry{margin=2.4cm}
+\graphicspath{{../outputs/figures/}}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\input{../outputs/tables/resultados.tex}
+
+\title{Análisis estadístico del tipo de cambio entre el peso uruguayo y el real brasileño}
+\author{Luis Farias \and Cristian Fernández \and Alejandro Pereira}
+\date{12/06/2026}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large Universidad Tecnológica del Uruguay (UTEC)\par}
+    \vspace{0.2cm}
+    {\large Instituto Tecnológico Regional Norte\par}
+    \vspace{0.2cm}
+    {\large Licenciatura en Ingeniería de Datos e Inteligencia Artificial\par}
+    \vspace{1.6cm}
+    {\Large Probabilidad y Estadística\par}
+    \vspace{1.3cm}
+    {\Huge\bfseries Análisis estadístico del tipo de cambio entre el peso uruguayo y el real brasileño\par}
+    \vspace{1.2cm}
+    {\large Variable principal: cotización UYU/BRL\par}
+    \vspace{1.2cm}
+    \begin{tabular}{rl}
+        Integrantes: & Luis Farias \\
+                     & Cristian Fernández \\
+                     & Alejandro Pereira \\
+        Fuente de datos: & Yahoo Finance mediante \texttt{yfinance} \\
+        Período analizado: & 24/03/2006--29/05/2026 \\
+        Año: & 2026 \\
+        Fecha: & 12/06/2026
+    \end{tabular}
+    \vfill
+    {\large Primera versión académica del informe\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+Este trabajo analiza el comportamiento estadístico del tipo de cambio entre el peso uruguayo y el real brasileño, expresado como la cantidad de pesos uruguayos necesarios para adquirir un real brasileño. El fenómeno resulta relevante por la relación económica, comercial y turística entre Uruguay y Brasil, y porque las variaciones cambiarias pueden afectar decisiones cotidianas y financieras. Se utilizó un conjunto de datos históricos obtenido desde Yahoo Finance mediante Python, construido a partir de las cotizaciones del dólar frente al peso uruguayo y frente al real brasileño. La muestra contiene \TotalRegistros{} observaciones y \TotalVariables{} variables, correspondientes al período \FechaMinima{} a \FechaMaxima{}.
+
+La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron técnicas de estadística descriptiva, visualización exploratoria, análisis de autocorrelación, comparación con distribuciones teóricas, intervalos de confianza para la media y la varianza, y pruebas de hipótesis sobre normalidad, correlación y dependencia temporal. Los resultados iniciales muestran una media muestral de \MediaCambio{} UYU/BRL, una mediana de \MedianaCambio{} y una dispersión muestral de \DesvioCambio{}. Además, se observan patrones temporales y autocorrelación, por lo que la interpretación inferencial debe realizarse con cautela. En particular, las asociaciones estadísticas detectadas no deben interpretarse como relaciones causales directas.
+
+\textbf{Palabras clave:} tipo de cambio, UYU/BRL, serie temporal, inferencia estadística, autocorrelación.
+
+\newpage
+\pagenumbering{arabic}
+
+\input{sections/01_introduccion.tex}
+\input{sections/02_metodologia.tex}
+\input{sections/03_analisis_descriptivo.tex}
+\input{sections/04_distribucion_teorica.tex}
+\input{sections/05_intervalos_confianza.tex}
+\input{sections/06_pruebas_hipotesis.tex}
+\input{sections/07_discusion.tex}
+\input{sections/08_conclusiones.tex}
+
+\newpage
+\nocite{yahoo_finance,yfinance,actividad_final_pye,python_docs,pandas_docs,numpy_docs,matplotlib_docs,scipy_docs,statsmodels_docs}
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

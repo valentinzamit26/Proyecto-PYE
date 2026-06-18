@@ -1,0 +1,5 @@
+variable,prueba,estadistico,p_value
+uyu_por_brl,D'Agostino-Pearson,1547.5193211438225,0.0
+uyu_por_brl,Kolmogorov-Smirnov estandarizado,0.1064150506546021,5.737568803652707e-52
+log_retorno_brl_por_uyu,D'Agostino-Pearson,617.6059799059566,7.736873003220717e-135
+log_retorno_brl_por_uyu,Kolmogorov-Smirnov estandarizado,0.06235601272031677,4.253440402074238e-18

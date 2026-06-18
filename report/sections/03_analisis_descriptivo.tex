@@ -1,0 +1,50 @@
+\section{Análisis descriptivo}
+
+La muestra contiene \TotalRegistros{} registros. El dataset original incluye siete columnas y el pipeline agrega dos variables derivadas de retorno para la cotización principal. La variable principal, \texttt{uyu\_por\_brl}, presenta una media de \MediaCambio{}, una mediana de \MedianaCambio{} y un desvío estándar muestral de \DesvioCambio{}. Estos valores resumen el nivel central y la variabilidad del tipo de cambio durante el período estudiado.
+
+\input{../outputs/tables/descriptivo_uyu_por_brl.tex}
+
+El primer cuartil es \QunoCambio{} y el tercer cuartil es \QtresCambio{}, por lo que el rango intercuartílico es \IqrCambio{}. Este rango permite estudiar la dispersión central sin depender de los valores extremos. El coeficiente de variación fue \CoefVariacionCambio{}, la asimetría fue \AsimetriaCambio{} y la curtosis fue \CurtosisCambio{}. Con el criterio de 1.5 veces el IQR se detectan \OutliersCambio{} posibles valores atípicos, que deben interpretarse en contexto económico y temporal.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{serie_uyu_por_brl.png}
+    \caption{Evolución temporal diaria del tipo de cambio UYU/BRL.}
+    \label{fig:serie-cambio}
+\end{figure}
+
+Fuente: elaboración propia a partir de datos de Yahoo Finance.
+
+La Figura \ref{fig:serie-cambio} muestra que el tipo de cambio no se comporta como una muestra independiente sin estructura temporal. Se observan períodos de subas, bajas y cambios de nivel, lo cual justifica complementar el análisis descriptivo con herramientas propias de series de tiempo.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{hist_uyu_por_brl.png}
+        \caption{Histograma}
+        \label{fig:hist-cambio}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{boxplot_uyu_por_brl.png}
+        \caption{Boxplot}
+        \label{fig:box-cambio}
+    \end{subfigure}
+    \caption{Distribución empírica y valores extremos de la cotización UYU/BRL.}
+    \label{fig:dist-box}
+\end{figure}
+
+Fuente: elaboración propia a partir de datos de Yahoo Finance.
+
+El histograma permite observar la forma de la distribución empírica, mientras que el boxplot resume la posición central, la dispersión y los posibles valores atípicos. Dado que la variable corresponde a una cotización financiera, los valores extremos no deben eliminarse automáticamente: pueden representar momentos relevantes del mercado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.78\textwidth]{volatilidad_movil_60d.png}
+    \caption{Volatilidad móvil de 60 ruedas calculada sobre los log-retornos diarios.}
+    \label{fig:volatilidad}
+\end{figure}
+
+Fuente: elaboración propia a partir de datos de Yahoo Finance.
+
+La volatilidad móvil sugiere que la variabilidad de los retornos no permanece constante durante todo el período. Este comportamiento es habitual en series financieras y limita la aplicación directa de algunos métodos clásicos que suponen independencia y varianza constante.

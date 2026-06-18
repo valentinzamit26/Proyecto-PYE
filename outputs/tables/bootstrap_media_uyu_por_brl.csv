@@ -1,0 +1,2 @@
+nivel_confianza,media_bootstrap,limite_inferior,limite_superior,amplitud,metodo,repeticiones,semilla
+0.95,9.20963453088893,9.167198595126862,9.249507078662468,0.0823084835356056,bootstrap percentil,5000,42
