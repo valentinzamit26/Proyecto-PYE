@@ -70,9 +70,9 @@
 
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
-Este trabajo analiza el comportamiento estadístico del tipo de cambio entre el peso uruguayo y el real brasileño, expresado como la cantidad de pesos uruguayos necesarios para adquirir un real brasileño. El fenómeno resulta relevante por la relación económica, comercial y turística entre Uruguay y Brasil, y porque las variaciones cambiarias pueden afectar decisiones cotidianas y financieras. Se utilizó un conjunto de datos históricos obtenido desde Yahoo Finance mediante Python, construido a partir de las cotizaciones del dólar frente al peso uruguayo y frente al real brasileño. La muestra contiene \TotalRegistros{} observaciones y \TotalVariables{} variables, correspondientes al período \FechaMinima{} a \FechaMaxima{}.
+Este trabajo analiza el comportamiento estadístico del tipo de cambio entre el peso uruguayo y el real brasileño, expresado como la cantidad de pesos uruguayos necesarios para adquirir un real brasileño. El estudio sigue el recorrido metodológico trabajado en el curso: definición de población y muestra, análisis exploratorio, modelización probabilística e inferencia estadística. El fenómeno resulta relevante por la relación económica, comercial y turística entre Uruguay y Brasil. Se utilizó un conjunto de datos históricos obtenido desde Yahoo Finance mediante Python, construido a partir de las cotizaciones del dólar frente al peso uruguayo y frente al real brasileño. La muestra contiene \TotalRegistros{} observaciones correspondientes al período \FechaMinima{} a \FechaMaxima{}.
 
-La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron técnicas de estadística descriptiva, visualización exploratoria, análisis de autocorrelación, comparación con distribuciones teóricas, intervalos de confianza para la media y la varianza, y pruebas de hipótesis sobre normalidad, correlación y dependencia temporal. Los resultados iniciales muestran una media muestral de \MediaCambio{} UYU/BRL, una mediana de \MedianaCambio{} y una dispersión muestral de \DesvioCambio{}. Además, se observan patrones temporales y autocorrelación, por lo que la interpretación inferencial debe realizarse con cautela. En particular, las asociaciones estadísticas detectadas no deben interpretarse como relaciones causales directas.
+La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron medidas de tendencia central, cuartiles, IQR, varianza y desvío estándar; además, se utilizaron histogramas, boxplots, Q-Q plots, autocorrelación, ajuste de distribuciones, intervalos de confianza y pruebas de hipótesis. Los resultados iniciales muestran una media muestral de \MediaCambio{} UYU/BRL, una mediana de \MedianaCambio{} y una dispersión muestral de \DesvioCambio{}. La evidencia indica estructura temporal, por lo que la inferencia clásica debe interpretarse con cautela. Las asociaciones estadísticas observadas no implican causalidad económica.
 
 \textbf{Palabras clave:} tipo de cambio, UYU/BRL, serie temporal, inferencia estadística, autocorrelación.
 
@@ -89,7 +89,7 @@ La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron técni
 \input{sections/08_conclusiones.tex}
 
 \newpage
-\nocite{yahoo_finance,yfinance,actividad_final_pye,python_docs,pandas_docs,numpy_docs,matplotlib_docs,scipy_docs,statsmodels_docs}
+\nocite{yahoo_finance,yfinance,actividad_final_pye,curso_intro,curso_eda,curso_media_varianza,curso_continuas,curso_muestreo,curso_hipotesis,curso_bondad,walpole2012,bertsekas2008,python_docs,pandas_docs,numpy_docs,matplotlib_docs,scipy_docs,statsmodels_docs}
 \bibliographystyle{plain}
 \bibliography{references}
 

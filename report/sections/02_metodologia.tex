@@ -1,26 +1,40 @@
 \section{Metodología}
 
-La fuente de datos utilizada fue Yahoo Finance, accedida mediante la librería \texttt{yfinance} de Python. Como no se trabajó con una cotización directa UYU/BRL, se descargaron dos series cambiarias: \texttt{USDUYU=X}, que representa pesos uruguayos por dólar estadounidense, y \texttt{USDBRL=X}, que representa reales brasileños por dólar estadounidense. A partir de ambas series se construyó la variable principal:
+\subsection{Fuente, población y muestra}
+
+La fuente de datos fue Yahoo Finance, accedida originalmente mediante la biblioteca \texttt{yfinance}. Como no se utilizó una cotización directa UYU/BRL, se descargaron dos series de precios de cierre diarios: \texttt{USDUYU=X}, que representa pesos uruguayos por dólar estadounidense, y \texttt{USDBRL=X}, que representa reales brasileños por dólar estadounidense. El dólar estadounidense se utilizó como moneda puente para construir la cotización cruzada:
 
 \[
     \text{UYU/BRL} = \frac{\text{UYU/USD}}{\text{BRL/USD}}.
 \]
 
-La unidad estadística corresponde a una observación diaria con datos completos para ambas cotizaciones. La población de interés se interpreta como el conjunto de valores posibles del tipo de cambio UYU/BRL durante el período de estudio. La muestra efectiva contiene \TotalRegistros{} registros entre \FechaMinima{} y \FechaMaxima{}.
+De forma inversa:
 
-El archivo original contiene siete columnas: fecha, cotizaciones base frente al dólar, cotización directa construida UYU/BRL, cotización inversa BRL/UYU, retorno diario y log-retorno de la cotización inversa. Durante el procesamiento reproducible se agregaron dos variables derivadas para la cotización principal: \texttt{retorno\_diario\_uyu\_por\_brl} y \texttt{log\_retorno\_uyu\_por\_brl}; por eso las tablas generadas informan \TotalVariables{} variables. Se validó la presencia de las columnas esperadas, se ordenaron las observaciones por fecha y se calcularon valores faltantes. El total de nulos detectado luego de crear retornos fue \NulosTotales{}, correspondientes al primer valor no definido de las series de retornos. No se detectaron fechas duplicadas: \DuplicadosFecha{}.
+\[
+    \text{BRL/UYU} = \frac{\text{BRL/USD}}{\text{UYU/USD}}.
+\]
 
-También se verificó la relación recíproca entre \texttt{uyu\_por\_brl} y \texttt{brl\_por\_uyu}. El máximo error absoluto observado en el producto \(\text{UYU/BRL}\times\text{BRL/UYU}\) fue \MaxErrorProductoInverso{}, lo que confirma que ambas columnas representan la misma relación cambiaria en sentidos inversos.
+Siguiendo la distinción trabajada en el curso entre población, muestra y tamaño muestral \cite{curso_intro,curso_muestreo}, la población conceptual corresponde al conjunto de valores posibles del tipo de cambio UYU/BRL en el mercado cambiario durante el período de interés. La muestra observada está formada por \TotalRegistros{} registros entre \FechaMinima{} y \FechaMaxima{}. Cada fila representa una fecha con información completa para construir la cotización cruzada; no se afirma que cada fila sea un día calendario, porque pueden faltar fines de semana, feriados o fechas sin cotización.
 
-El análisis se realizó con Python, usando principalmente \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib}, \texttt{seaborn}, \texttt{scipy} y \texttt{statsmodels}. El informe se redactó en LaTeX. La metodología estadística incluyó:
+La muestra no debe tratarse como una muestra aleatoria simple. Es una serie histórica observacional, por lo que el supuesto de independencia entre observaciones requiere revisión antes de aplicar métodos inferenciales clásicos.
 
-\begin{itemize}
-    \item medidas descriptivas de la cotización UYU/BRL y de los log-retornos;
-    \item histogramas, boxplots, Q-Q plots y gráficos de evolución temporal;
-    \item autocorrelación de log-retornos para diferentes rezagos;
-    \item correlaciones de Pearson entre variables cambiarias;
-    \item comparación de distribuciones Normal, Log-normal y Gamma mediante prueba Kolmogorov-Smirnov;
-    \item intervalos de confianza clásicos para media y varianza, y un intervalo bootstrap para la media.
-\end{itemize}
+\subsection{Variable principal y variables complementarias}
 
-Una limitación metodológica importante es que la muestra no surge de un muestreo aleatorio simple, sino de una serie histórica observacional. Por lo tanto, la independencia entre observaciones no puede asumirse automáticamente. Además, al tratarse de datos financieros, los resultados deben interpretarse como evidencia descriptiva e inferencial condicionada al período observado, no como una afirmación causal.
+La variable principal es \texttt{uyu\_por\_brl}, interpretada como pesos uruguayos necesarios para comprar un real brasileño. Es una variable cuantitativa continua, ya que puede tomar valores decimales dentro de un intervalo de números reales. En términos del curso, puede estudiarse mediante una distribución empírica y, eventualmente, aproximarse mediante una función de densidad de probabilidad (FDP) teórica \cite{curso_continuas}.
+
+El archivo original contiene siete columnas: \texttt{fecha}, \texttt{brl\_por\_usd}, \texttt{uyu\_por\_usd}, \texttt{brl\_por\_uyu}, \texttt{uyu\_por\_brl}, \texttt{retorno\_diario\_brl\_por\_uyu} y \texttt{log\_retorno\_brl\_por\_uyu}. El pipeline reproducible agrega dos variables derivadas para la cotización principal: \texttt{retorno\_diario\_uyu\_por\_brl} y \texttt{log\_retorno\_uyu\_por\_brl}; por eso las tablas generadas informan \TotalVariables{} variables.
+
+\subsection{Preparación y validación}
+
+El proceso de preparación incluyó conversión de \texttt{fecha} a formato temporal, ordenamiento cronológico, validación de columnas esperadas, conteo de valores nulos y verificación de duplicados. El total de nulos detectado luego de crear retornos fue \NulosTotales{}, asociado al primer valor no definido de las series de retornos. No se detectaron fechas duplicadas: \DuplicadosFecha{}.
+
+También se verificó que \texttt{uyu\_por\_brl} y \texttt{brl\_por\_uyu} fueran recíprocas. El máximo error absoluto observado en el producto \(\text{UYU/BRL}\times\text{BRL/UYU}\) fue \MaxErrorProductoInverso{}, compatible con error numérico de redondeo.
+
+\subsection{Métodos estadísticos}
+
+El análisis se desarrolló con Python, \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib}, \texttt{scipy}, \texttt{statsmodels}, Jupyter/Colab y LaTeX. Se aplicaron medidas de media, mediana, cuartiles, IQR, varianza, desvío estándar, coeficiente de variación, asimetría y curtosis. Para la exploración gráfica se utilizaron serie temporal, histograma, boxplot, Q-Q plot, autocorrelación y volatilidad móvil.
+
+La inferencia se construyó tomando como referencia las distribuciones muestrales de estadísticos vistas en el curso \cite{curso_muestreo}. Se calcularon intervalos de confianza para media y varianza, comparando el enfoque clásico con un intervalo bootstrap para la media. Para el ajuste de distribuciones se compararon modelos continuos positivos o de uso frecuente, y se aplicaron pruebas de bondad de ajuste, incluyendo chi-cuadrado según el enfoque de frecuencias observadas y esperadas \cite{curso_bondad}.
+
+Las principales limitaciones son la posible dependencia temporal, la no estacionariedad, cambios de comportamiento económico dentro del período y el hecho de que \texttt{uyu\_por\_brl} se construye algebraicamente a partir de \texttt{uyu\_por\_usd} y \texttt{brl\_por\_usd}. Por tanto, las asociaciones observadas no deben interpretarse como causalidad.
+

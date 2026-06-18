@@ -1,22 +1,29 @@
 \section{Intervalos de confianza}
 
-Se construyeron intervalos de confianza para la media y la varianza de \texttt{uyu\_por\_brl} con niveles de confianza de 90\%, 95\% y 99\%. Para la media, el intervalo clásico se basa en:
+La inferencia estadística busca usar información muestral para aproximar parámetros poblacionales. En el curso, este paso se apoya en distribuciones muestrales de estadísticos como la media, la varianza, la distribución t-Student y la distribución chi-cuadrado \cite{curso_muestreo}. En este trabajo se estimaron intervalos para la media y la varianza de \texttt{uyu\_por\_brl}.
+
+Para la media, con varianza poblacional desconocida, se utilizó el intervalo basado en t-Student:
 
 \[
     \bar{x} \pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}},
 \]
 
-donde \(\bar{x}\) es la media muestral, \(s\) el desvío estándar muestral y \(n\) el tamaño de la muestra. Para la varianza, bajo supuestos de normalidad e independencia, se usa:
-
-\[
-    \left(\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}\right).
-\]
+donde \(\bar{x}\) es la media muestral, \(s\) el desvío estándar muestral y \(n\) el tamaño de muestra.
 
 \input{../outputs/tables/ic_media_uyu_por_brl.tex}
 
+Para la varianza, bajo supuesto de normalidad e independencia, se utiliza la distribución chi-cuadrado:
+
+\[
+    \left(
+    \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},
+    \frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}
+    \right).
+\]
+
 \input{../outputs/tables/ic_varianza_uyu_por_brl.tex}
 
-Al aumentar el nivel de confianza, el intervalo se vuelve más amplio. Esto ocurre porque se exige mayor seguridad para capturar el parámetro poblacional, lo que aumenta el valor crítico utilizado en el cálculo. En el contexto del tipo de cambio, estos intervalos resumen el rango plausible para la media y la varianza del período observado, pero no deben leerse como predicciones garantizadas para períodos futuros.
+Al aumentar el nivel de confianza, aumenta la amplitud del intervalo. Esto ocurre porque el procedimiento exige un rango más amplio de valores compatibles con el parámetro. La interpretación correcta no es que exista una probabilidad del 95\% de que el parámetro fijo esté dentro del intervalo ya calculado, sino que el método produce intervalos que, en repeticiones del muestreo bajo sus supuestos, cubren el parámetro con esa frecuencia aproximada.
 
-Además del método clásico, se calculó un intervalo bootstrap percentil al 95\% para la media de UYU/BRL: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap resulta útil como alternativa empírica cuando existen dudas sobre los supuestos paramétricos. Sin embargo, en una serie temporal con autocorrelación, el remuestreo simple también tiene limitaciones, porque puede romper la estructura temporal de los datos.
+También se calculó un intervalo bootstrap percentil al 95\% para la media: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap aporta una alternativa empírica, pero en series temporales el remuestreo simple puede romper la dependencia entre observaciones. Por este motivo, una extensión metodológica más adecuada sería implementar bootstrap por bloques.
 
