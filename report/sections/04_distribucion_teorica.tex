@@ -1,6 +1,8 @@
 \section{Distribución teórica}
 
-La distribución empírica de \texttt{uyu\_por\_brl} se comparó con distribuciones teóricas continuas. Como primera aproximación se consideraron las distribuciones Normal, Log-normal y Gamma, porque son candidatas usuales para variables continuas positivas o aproximadamente simétricas. La comparación se realizó mediante la prueba Kolmogorov-Smirnov, ajustando previamente los parámetros de cada distribución candidata.
+En el curso, una variable aleatoria continua se describe mediante una función de densidad de probabilidad \(f_X(x)\), no negativa y vinculada al cálculo de probabilidades mediante áreas bajo la curva \cite{curso_continuas}. La cotización \texttt{uyu\_por\_brl} es positiva y continua, por lo que se compararon distribuciones teóricas candidatas con soporte adecuado o de uso frecuente: Normal, Log-normal y Gamma.
+
+La distribución empírica se observó primero mediante histogramas y Q-Q plots. El histograma permite mirar frecuencias por clases; el Q-Q plot permite comparar cuantiles observados contra cuantiles teóricos. Sin embargo, al tratarse de una serie temporal, ajustar una distribución a los valores marginales no modela automáticamente la dependencia temporal.
 
 \begin{figure}[H]
     \centering
@@ -11,27 +13,25 @@ La distribución empírica de \texttt{uyu\_por\_brl} se comparó con distribucio
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{qq_log_retornos.png}
+        \includegraphics[width=\textwidth]{hist_log_retornos.png}
         \caption{Log-retornos}
-        \label{fig:qq-retornos}
+        \label{fig:hist-retornos}
     \end{subfigure}
-    \caption{Q-Q plots frente a la distribución Normal.}
-    \label{fig:qqplots}
+    \caption{Comparación visual del nivel de la cotización y de sus log-retornos. Fuente: elaboración propia a partir de Yahoo Finance.}
+    \label{fig:modelado-visual}
 \end{figure}
-
-El Q-Q plot de la cotización permite evaluar visualmente si los cuantiles observados se alinean con los cuantiles esperados bajo normalidad. En series financieras, los retornos suelen ser más adecuados para estudiar supuestos distribucionales que los niveles de la cotización, porque estos últimos pueden presentar tendencia, cambios de régimen y dependencia temporal.
 
 \input{../outputs/tables/bondad_ajuste_uyu_por_brl.tex}
 
+Como complemento, se aplicó una prueba chi-cuadrado de bondad de ajuste. Según el material del curso, este procedimiento compara frecuencias observadas con frecuencias esperadas por clase y utiliza un estadístico de la forma:
+
+\[
+    E = \sum_{k=1}^{K} \frac{(O_k - T_k)^2}{T_k},
+\]
+
+donde \(O_k\) es la frecuencia observada y \(T_k\) la frecuencia teórica esperada en la clase \(k\). La prueba requiere que las frecuencias esperadas sean suficientemente grandes; el curso señala como referencia que sean mayores o iguales a 5 \cite{curso_bondad}.
+
 \input{../outputs/tables/bondad_ajuste_chi2_uyu_por_brl.tex}
 
-Según el criterio KS, la mejor distribución entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable entre las alternativas comparadas, aunque con p-value \MejorDistribucionChiP{}. En consecuencia, la evidencia disponible no permite afirmar que la distribución sea exacta; solamente permite señalar qué candidata se comportó relativamente mejor bajo los criterios utilizados.
+Según el criterio KS, la mejor distribución relativa entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable, aunque con p-value \MejorDistribucionChiP{}. Por lo tanto, la evidencia no permite afirmar que la distribución sea exacta; solamente indica qué modelo presenta mejor desempeño relativo entre los evaluados.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.80\textwidth]{hist_log_retornos.png}
-    \caption{Distribución empírica de los log-retornos diarios.}
-    \label{fig:hist-retornos}
-\end{figure}
-
-El análisis de log-retornos complementa el estudio de la cotización en niveles, ya que permite observar las variaciones relativas diarias. Esta transformación es habitual en datos financieros y ayuda a evaluar la estabilidad de la serie, aunque no garantiza por sí misma normalidad ni independencia.

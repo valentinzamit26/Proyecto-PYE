@@ -1,6 +1,6 @@
 \section{Pruebas de hipótesis}
 
-Las pruebas de hipótesis se aplicaron para evaluar normalidad, asociación lineal y dependencia temporal. En todos los casos se consideró un nivel de significancia de referencia \(\alpha = 0.05\), sin perder de vista que la significancia estadística no implica importancia práctica ni causalidad.
+El curso presenta la prueba de hipótesis como un procedimiento para evaluar afirmaciones sobre una población a partir de una muestra. Sus etapas principales son identificar un estadístico de prueba, definir \(H_0\), definir \(H_1\), obtener la distribución nula y comparar el valor observado con dicha distribución \cite{curso_hipotesis}. En este informe se utiliza \(\alpha = 0.05\) como nivel de significancia.
 
 \subsection{Normalidad}
 
@@ -15,11 +15,11 @@ Para la cotización UYU/BRL y los log-retornos se planteó:
 
 \input{../outputs/tables/normalidad.tex}
 
-Si el p-value es menor que 0.05, se rechaza la hipótesis nula de normalidad. En muestras grandes, este rechazo puede ocurrir aun cuando las desviaciones visuales sean moderadas, por lo que se complementa la interpretación con histogramas y Q-Q plots.
+Cuando el p-value es menor o igual que \(\alpha\), se rechaza \(H_0\). Si el p-value es mayor, no se rechaza \(H_0\); esto no significa aceptar que la normalidad sea verdadera, sino reconocer que no existe evidencia suficiente para rechazarla con ese criterio. En muestras grandes, incluso diferencias pequeñas pueden producir p-values muy bajos.
 
-\subsection{Correlaciones entre variables cambiarias}
+\subsection{Correlación entre cotizaciones base}
 
-Se evaluaron correlaciones de Pearson entre las variables numéricas principales. Para cada par se planteó:
+Se evaluaron correlaciones de Pearson entre variables cambiarias. Para cada par se planteó:
 
 \[
     H_0: \rho = 0
@@ -30,7 +30,7 @@ Se evaluaron correlaciones de Pearson entre las variables numéricas principales
 
 \input{../outputs/tables/correlaciones.tex}
 
-La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrBrlUsdUyuUsd{}. Este resultado indica asociación lineal en el período observado, pero no permite afirmar causalidad entre ambas series. Ambas variables pueden responder simultáneamente a factores macroeconómicos, monetarios y financieros externos.
+La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrBrlUsdUyuUsd{}. Este resultado describe asociación lineal en el período observado, pero no demuestra causalidad. Además, \texttt{uyu\_por\_brl} se construye algebraicamente a partir de ambas cotizaciones base, por lo que no corresponde interpretar esas variables como predictores independientes en sentido causal.
 
 \begin{figure}[H]
     \centering
@@ -41,25 +41,26 @@ La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrB
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{matriz_correlacion.png}
-        \caption{Matriz de correlación}
-        \label{fig:heatmap}
+        \includegraphics[width=\textwidth]{acf_log_retornos.png}
+        \caption{ACF de log-retornos}
+        \label{fig:acf}
     \end{subfigure}
-    \caption{Relaciones lineales entre variables cambiarias.}
-    \label{fig:correlaciones}
+    \caption{Relación entre cotizaciones base y autocorrelación de log-retornos. Fuente: elaboración propia a partir de Yahoo Finance.}
+    \label{fig:hipotesis-graficos}
 \end{figure}
 
-\subsection{Autocorrelación de retornos}
+\subsection{Autocorrelación}
 
-Para estudiar dependencia temporal en los log-retornos se calculó la autocorrelación para distintos rezagos. Conceptualmente, se contrasta si la correlación entre la serie y sus valores rezagados es nula.
+Para evaluar dependencia temporal se calcularon autocorrelaciones de los log-retornos:
+
+\[
+    H_0: \rho_k = 0
+\]
+\[
+    H_1: \rho_k \neq 0.
+\]
 
 \input{../outputs/tables/autocorrelacion_log_retornos.tex}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.80\textwidth]{acf_log_retornos.png}
-    \caption{Autocorrelación de log-retornos diarios para distintos rezagos.}
-    \label{fig:acf}
-\end{figure}
+La autocorrelación permite distinguir entre el comportamiento del nivel de una cotización y el comportamiento de sus retornos. Una autocorrelación alta en niveles no implica necesariamente la misma estructura en retornos. En esta versión no se implementó la prueba Ljung-Box, por lo que queda como mejora posterior para evaluar autocorrelación conjunta hasta varios rezagos.
 
-La presencia de autocorrelaciones relevantes indicaría que las observaciones no son completamente independientes. Esta característica es importante porque varios procedimientos inferenciales clásicos suponen independencia muestral. Como no se implementó una prueba Ljung-Box en esta versión, queda como mejora posible para una revisión posterior.
