@@ -18,9 +18,9 @@ Analizar estadisticamente el comportamiento del tipo de cambio UYU/BRL mediante 
 
 ## Integrantes
 
-- Luis Farias
-- Cristian Fernandez
-- Alejandro Pereira
+- Fabrizio Soria 
+- Valentin Zamit 
+- Rafael Rodriguez
 
 ## Instalacion
 
