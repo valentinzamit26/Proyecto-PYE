@@ -1,0 +1,65 @@
+\section{Pruebas de hipótesis}
+
+Las pruebas de hipótesis se aplicaron para evaluar normalidad, asociación lineal y dependencia temporal. En todos los casos se consideró un nivel de significancia de referencia \(\alpha = 0.05\), sin perder de vista que la significancia estadística no implica importancia práctica ni causalidad.
+
+\subsection{Normalidad}
+
+Para la cotización UYU/BRL y los log-retornos se planteó:
+
+\[
+    H_0: \text{los datos provienen de una distribución Normal}
+\]
+\[
+    H_1: \text{los datos no provienen de una distribución Normal}.
+\]
+
+\input{../outputs/tables/normalidad.tex}
+
+Si el p-value es menor que 0.05, se rechaza la hipótesis nula de normalidad. En muestras grandes, este rechazo puede ocurrir aun cuando las desviaciones visuales sean moderadas, por lo que se complementa la interpretación con histogramas y Q-Q plots.
+
+\subsection{Correlaciones entre variables cambiarias}
+
+Se evaluaron correlaciones de Pearson entre las variables numéricas principales. Para cada par se planteó:
+
+\[
+    H_0: \rho = 0
+\]
+\[
+    H_1: \rho \neq 0.
+\]
+
+\input{../outputs/tables/correlaciones.tex}
+
+La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrBrlUsdUyuUsd{}. Este resultado indica asociación lineal en el período observado, pero no permite afirmar causalidad entre ambas series. Ambas variables pueden responder simultáneamente a factores macroeconómicos, monetarios y financieros externos.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{scatter_brl_usd_vs_uyu_usd.png}
+        \caption{Dispersión BRL/USD vs UYU/USD}
+        \label{fig:scatter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{matriz_correlacion.png}
+        \caption{Matriz de correlación}
+        \label{fig:heatmap}
+    \end{subfigure}
+    \caption{Relaciones lineales entre variables cambiarias.}
+    \label{fig:correlaciones}
+\end{figure}
+
+\subsection{Autocorrelación de retornos}
+
+Para estudiar dependencia temporal en los log-retornos se calculó la autocorrelación para distintos rezagos. Conceptualmente, se contrasta si la correlación entre la serie y sus valores rezagados es nula.
+
+\input{../outputs/tables/autocorrelacion_log_retornos.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{acf_log_retornos.png}
+    \caption{Autocorrelación de log-retornos diarios para distintos rezagos.}
+    \label{fig:acf}
+\end{figure}
+
+La presencia de autocorrelaciones relevantes indicaría que las observaciones no son completamente independientes. Esta característica es importante porque varios procedimientos inferenciales clásicos suponen independencia muestral. Como no se implementó una prueba Ljung-Box en esta versión, queda como mejora posible para una revisión posterior.

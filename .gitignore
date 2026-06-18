@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Credentials
+kaggle.json
+.env
+
+# Raw datasets can be regenerated from source and may have licensing limits.
+data/raw/*.csv
+
+# Generated LaTeX PDF in report/; stable copies belong in versions/.
+report/main.pdf
+
+!.gitkeep

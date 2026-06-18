@@ -1,0 +1,22 @@
+\section{Intervalos de confianza}
+
+Se construyeron intervalos de confianza para la media y la varianza de \texttt{uyu\_por\_brl} con niveles de confianza de 90\%, 95\% y 99\%. Para la media, el intervalo clásico se basa en:
+
+\[
+    \bar{x} \pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}},
+\]
+
+donde \(\bar{x}\) es la media muestral, \(s\) el desvío estándar muestral y \(n\) el tamaño de la muestra. Para la varianza, bajo supuestos de normalidad e independencia, se usa:
+
+\[
+    \left(\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}\right).
+\]
+
+\input{../outputs/tables/ic_media_uyu_por_brl.tex}
+
+\input{../outputs/tables/ic_varianza_uyu_por_brl.tex}
+
+Al aumentar el nivel de confianza, el intervalo se vuelve más amplio. Esto ocurre porque se exige mayor seguridad para capturar el parámetro poblacional, lo que aumenta el valor crítico utilizado en el cálculo. En el contexto del tipo de cambio, estos intervalos resumen el rango plausible para la media y la varianza del período observado, pero no deben leerse como predicciones garantizadas para períodos futuros.
+
+Además del método clásico, se calculó un intervalo bootstrap percentil al 95\% para la media de UYU/BRL: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap resulta útil como alternativa empírica cuando existen dudas sobre los supuestos paramétricos. Sin embargo, en una serie temporal con autocorrelación, el remuestreo simple también tiene limitaciones, porque puede romper la estructura temporal de los datos.
+

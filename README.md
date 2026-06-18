@@ -1,101 +1,84 @@
-# Codigo Proyecto-PYE
-import numpy as np
-import pandas as pd
-import yfinance as yf
+# Proyecto final - Probabilidad y Estadistica
 
+## Tema
 
-START_DATE = "2005-01-01"
-END_DATE = "2026-06-01"  # yfinance no incluye la fecha final
+Analisis estadistico del tipo de cambio entre el peso uruguayo y el real brasileno.
 
-CSV_FILE = "dataset_uyu_brl_2005_2026.csv"
+El proyecto estudia la cotizacion `UYU/BRL`, entendida como la cantidad de pesos uruguayos necesarios para comprar un real brasileno. La variable se construye de forma indirecta a partir de las cotizaciones `USDUYU=X` y `USDBRL=X`, usando el dolar estadounidense como moneda de referencia.
 
-TICKERS = {
-    "uyu_por_usd": "USDUYU=X",  # pesos uruguayos por 1 dolar
-    "brl_por_usd": "USDBRL=X",  # reales brasilenos por 1 dolar
-}
+## Objetivo
 
+Analizar estadisticamente el comportamiento del tipo de cambio UYU/BRL mediante estadistica descriptiva, analisis exploratorio, ajuste de distribuciones, intervalos de confianza y pruebas de hipotesis adecuadas para una serie temporal financiera.
 
-def descargar_datos():
-    data = yf.download(
-        list(TICKERS.values()),
-        start=START_DATE,
-        end=END_DATE,
-        interval="1d",
-        auto_adjust=False,
-        progress=False,
-    )
+## Fuente de datos
 
-    if data.empty:
-        raise ValueError("No se descargaron datos. Revisa la conexion o los tickers.")
+- Fuente: Yahoo Finance, descargada mediante Python y `yfinance`.
+- Archivo esperado: `data/raw/dataset_uyu_brl_2005_2026.csv`.
+- Periodo observado en el archivo actual: se valida automaticamente con los scripts.
 
-    close = data["Close"].rename(
-        columns={
-            "USDUYU=X": "uyu_por_usd",
-            "USDBRL=X": "brl_por_usd",
-        }
-    )
+## Integrantes
 
-    return close.dropna().copy()
+- Luis Farias
+- Cristian Fernandez
+- Alejandro Pereira
 
+## Instalacion
 
-def crear_dataset(close):
-    df = close.copy()
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-    # Formula del proyecto:
-    # BRL por UYU = (BRL por USD) / (UYU por USD)
-    df["brl_por_uyu"] = df["brl_por_usd"] / df["uyu_por_usd"]
+## Ejecutar el analisis
 
-    # Columna inversa, util para interpretar: cuantos pesos uruguayos vale 1 real.
-    df["uyu_por_brl"] = df["uyu_por_usd"] / df["brl_por_usd"]
+Desde la raiz del proyecto:
 
-    df["retorno_diario_brl_por_uyu"] = df["brl_por_uyu"].pct_change()
-    df["log_retorno_brl_por_uyu"] = np.log(df["brl_por_uyu"]).diff()
+```powershell
+python src/run_all.py
+```
 
-    df = df.reset_index().rename(columns={"Date": "fecha"})
-    df["fecha"] = pd.to_datetime(df["fecha"])
+Esto genera tablas en `outputs/tables/` y figuras en `outputs/figures/`.
 
-    return df
+## Usar Google Colab
 
+El notebook principal para trabajar en Colab es:
 
-def crear_resumen(df):
-    columnas = ["brl_por_uyu", "uyu_por_brl"]
-    medidas = {
-        "cantidad": "count",
-        "media": "mean",
-        "mediana": "median",
-        "cuartil_1": lambda x: x.quantile(0.25),
-        "cuartil_3": lambda x: x.quantile(0.75),
-        "varianza": "var",
-        "desvio_estandar": "std",
-        "minimo": "min",
-        "maximo": "max",
-    }
+```text
+notebooks/analisis_uyu_brl_colab.ipynb
+```
 
-    filas = []
-    for nombre, funcion in medidas.items():
-        fila = {"medida": nombre}
-        for columna in columnas:
-            serie = df[columna].dropna()
-            fila[columna] = getattr(serie, funcion)() if isinstance(funcion, str) else funcion(serie)
-        filas.append(fila)
+Ese notebook carga el CSV desde GitHub, valida la variable principal `uyu_por_brl`, calcula estadisticas y genera graficos. Es la version mas amigable para mostrar el codigo y el proceso de analisis.
 
-    return pd.DataFrame(filas)
+## Compilar el informe LaTeX
 
+Desde la carpeta `report/`:
 
-def main():
-    close = descargar_datos()
-    df = crear_dataset(close)
-    resumen = crear_resumen(df)
+```powershell
+pdflatex main.tex
+bibtex main
+pdflatex main.tex
+pdflatex main.tex
+```
 
-    df.to_csv(CSV_FILE, index=False, encoding="utf-8-sig")
+El PDF resultante queda como `report/main.pdf`.
 
-    print("\nPrimeras filas del dataset:")
-    print(df.head(10).to_string(index=False))
+Si no se quiere instalar LaTeX localmente, usar Overleaf. Ver:
 
-    print("\nResumen estadistico:")
-    print(resumen.to_string(index=False))
+```text
+docs/guia_latex_google_docs.md
+```
 
-    print(f"\nArchivo creado:\n- {CSV_FILE}")
+## Guardar una version del PDF
 
+Luego de compilar:
 
-if __name__ == "__main__":
+```powershell
+Copy-Item report\main.pdf versions\informe_v0.20.pdf
+```
+
+## Proximo commit sugerido
+
+```text
+docs: redacta primera version del informe academico
+```

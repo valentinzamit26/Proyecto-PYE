@@ -1,0 +1,37 @@
+\section{Distribución teórica}
+
+La distribución empírica de \texttt{uyu\_por\_brl} se comparó con distribuciones teóricas continuas. Como primera aproximación se consideraron las distribuciones Normal, Log-normal y Gamma, porque son candidatas usuales para variables continuas positivas o aproximadamente simétricas. La comparación se realizó mediante la prueba Kolmogorov-Smirnov, ajustando previamente los parámetros de cada distribución candidata.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{qq_uyu_por_brl.png}
+        \caption{Cotización UYU/BRL}
+        \label{fig:qq-cambio}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{qq_log_retornos.png}
+        \caption{Log-retornos}
+        \label{fig:qq-retornos}
+    \end{subfigure}
+    \caption{Q-Q plots frente a la distribución Normal.}
+    \label{fig:qqplots}
+\end{figure}
+
+El Q-Q plot de la cotización permite evaluar visualmente si los cuantiles observados se alinean con los cuantiles esperados bajo normalidad. En series financieras, los retornos suelen ser más adecuados para estudiar supuestos distribucionales que los niveles de la cotización, porque estos últimos pueden presentar tendencia, cambios de régimen y dependencia temporal.
+
+\input{../outputs/tables/bondad_ajuste_uyu_por_brl.tex}
+
+\input{../outputs/tables/bondad_ajuste_chi2_uyu_por_brl.tex}
+
+Según el criterio KS, la mejor distribución entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable entre las alternativas comparadas, aunque con p-value \MejorDistribucionChiP{}. En consecuencia, la evidencia disponible no permite afirmar que la distribución sea exacta; solamente permite señalar qué candidata se comportó relativamente mejor bajo los criterios utilizados.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{hist_log_retornos.png}
+    \caption{Distribución empírica de los log-retornos diarios.}
+    \label{fig:hist-retornos}
+\end{figure}
+
+El análisis de log-retornos complementa el estudio de la cotización en niveles, ya que permite observar las variaciones relativas diarias. Esta transformación es habitual en datos financieros y ayuda a evaluar la estabilidad de la serie, aunque no garantiza por sí misma normalidad ni independencia.
