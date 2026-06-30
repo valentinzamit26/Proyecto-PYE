@@ -1,76 +1,20 @@
-\section{Pruebas de hipótesis}
+\section{Prueba de hipótesis utilizada}
 
-El curso presenta la prueba de hipótesis como un procedimiento para evaluar afirmaciones sobre una población a partir de una muestra. Sus etapas principales son identificar un estadístico de prueba, definir \(H_0\), definir \(H_1\), obtener la distribución nula y comparar el valor observado con dicha distribución \cite{curso_hipotesis}. En este informe se utiliza \(\alpha = 0.05\) como nivel de significancia.
+El curso presenta la prueba de hipótesis como un procedimiento para evaluar afirmaciones sobre una población a partir de una muestra. Sus etapas principales son identificar un estadístico de prueba, definir \(H_0\), definir \(H_1\), obtener la distribución nula y comparar el valor observado con dicha distribución \cite{curso_hipotesis}.
 
-\subsection{Normalidad}
+En este trabajo, la prueba de hipótesis central es la prueba chi-cuadrado de bondad de ajuste. No se incorporan pruebas externas de normalidad ni pruebas formales de autocorrelación, porque no forman parte del desarrollo teórico utilizado como base. La autocorrelación y Pearson se usan como herramientas descriptivas.
 
-Para la cotización UYU/BRL y los log-retornos se planteó:
-
-\[
-    H_0: \text{los datos provienen de una distribución Normal}
-\]
-\[
-    H_1: \text{los datos no provienen de una distribución Normal}.
-\]
-
-\begin{table}[htbp]
-\centering
-\footnotesize
-\caption{Síntesis de pruebas de hipótesis principales.}
-\label{tab:hipotesis-compacta}
-\begin{tabular}{p{3.8cm}p{4.2cm}p{4.6cm}}
-\toprule
-Prueba & Resultado clave & Decisión con \(\alpha=0.05\) \\
-\midrule
-Normalidad UYU/BRL & \(p < 0.001\) & Se rechaza \(H_0\) \\
-Normalidad log-retornos & \(p < 0.001\) & Se rechaza \(H_0\) \\
-Correlación BRL/USD--UYU/USD & \(r=0.9819\), \(p<0.001\) & Se rechaza \(H_0:\rho=0\) \\
-ACF log-retornos lag 1 & \(\rho_1=-0.1917\) & Evidencia de dependencia lineal \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Cuando el p-value es menor o igual que \(\alpha\), se rechaza \(H_0\). Si el p-value es mayor, no se rechaza \(H_0\); esto no significa aceptar que la normalidad sea verdadera, sino reconocer que no existe evidencia suficiente para rechazarla con ese criterio. En muestras grandes, incluso diferencias pequeñas pueden producir p-values muy bajos.
-
-\subsection{Correlación entre cotizaciones base}
-
-Se evaluaron correlaciones de Pearson entre variables cambiarias. Para cada par se planteó:
+Para cada distribución candidata se planteó:
 
 \[
-    H_0: \rho = 0
+H_0: \text{el modelo propuesto representa adecuadamente la distribución de la población}
 \]
-\[
-    H_1: \rho \neq 0.
-\]
-
-La correlación entre \texttt{brl\_por\_usd} y \texttt{uyu\_por\_usd} fue \CorrBrlUsdUyuUsd{}. Este resultado describe asociación lineal en el período observado, pero no demuestra causalidad. Además, \texttt{uyu\_por\_brl} se construye algebraicamente a partir de ambas cotizaciones base, por lo que no corresponde interpretar esas variables como predictores independientes en sentido causal.
-
-\begin{figure}[htbp]
-    \centering
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{scatter_brl_usd_vs_uyu_usd.png}
-        \caption{Dispersión BRL/USD vs UYU/USD}
-        \label{fig:scatter}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{acf_log_retornos.png}
-        \caption{ACF de log-retornos}
-        \label{fig:acf}
-    \end{subfigure}
-    \caption{Relación entre cotizaciones base y autocorrelación de log-retornos. Fuente: elaboración propia a partir de Yahoo Finance.}
-    \label{fig:hipotesis-graficos}
-\end{figure}
-
-\subsection{Autocorrelación}
-
-Para evaluar dependencia temporal se calcularon autocorrelaciones de los log-retornos:
 
 \[
-    H_0: \rho_k = 0
-\]
-\[
-    H_1: \rho_k \neq 0.
+H_1: \text{el modelo propuesto no representa adecuadamente la distribución de la población}.
 \]
 
-La autocorrelación permite distinguir entre el comportamiento del nivel de una cotización y el comportamiento de sus retornos. Una autocorrelación alta en niveles no implica necesariamente la misma estructura en retornos. En esta versión no se implementó la prueba Ljung-Box, por lo que queda como mejora posterior para evaluar autocorrelación conjunta hasta varios rezagos.
+Con \(\alpha=0.05\), los p-values obtenidos fueron menores que 0.001 para Normal, Gamma y Log-normal. Por ese motivo se rechaza \(H_0\) en los tres casos. La conclusión no es que no exista ninguna distribución útil, sino que ninguna de las tres candidatas debe presentarse como ajuste exacto. Aun así, el menor estadístico chi-cuadrado correspondió a la Log-normal, seguida por la Gamma.
+
+Este resultado permite responder a la pregunta de la consigna: la mejor distribución de probabilidad para el conjunto de datos, entre las evaluadas, fue la Log-normal en sentido relativo. Si se consideran solo las distribuciones desarrolladas formalmente en el curso, la Gamma fue la mejor alternativa.
+

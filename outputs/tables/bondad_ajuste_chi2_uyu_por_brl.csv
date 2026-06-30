@@ -1,4 +1,4 @@
-distribucion,clases,frecuencia_esperada_minima,grados_libertad,chi2_estadistico,p_value
-lognormal,12,435.3333333333333,8,1064.4594180704441,1.8120518204516504e-224
-gamma,12,435.3333333333333,8,1324.75191424196,1.0493195683275366e-280
-normal,12,435.3333333333333,9,1817.234303215927,0.0
+distribucion,clases,parametros_estimados,frecuencia_esperada_minima,grados_libertad,chi2_estadistico,p_value,decision_alpha_0_05
+Log-normal,12,3,435.3333333333333,8,1064.4594180704441,1.8120518204516504e-224,Se rechaza H0
+Gamma,12,3,435.3333333333333,8,1324.75191424196,1.0493195683275366e-280,Se rechaza H0
+Normal,12,2,435.3333333333333,9,1817.234303215927,0.0,Se rechaza H0

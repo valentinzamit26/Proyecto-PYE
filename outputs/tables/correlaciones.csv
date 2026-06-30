@@ -1,5 +1,5 @@
-variable_x,variable_y,pearson_r,p_value,n
-brl_por_usd,uyu_por_usd,0.9818913290436565,0.0,5224
-brl_por_usd,uyu_por_brl,-0.888490821174499,0.0,5224
-uyu_por_usd,uyu_por_brl,-0.8102234171525634,0.0,5224
-brl_por_uyu,uyu_por_brl,-0.9899339917419768,0.0,5224
+variable_x,variable_y,pearson_r,n
+brl_por_usd,uyu_por_usd,0.9818913290436565,5224
+brl_por_usd,uyu_por_brl,-0.888490821174499,5224
+uyu_por_usd,uyu_por_brl,-0.8102234171525631,5224
+brl_por_uyu,uyu_por_brl,-0.9899339917419772,5224

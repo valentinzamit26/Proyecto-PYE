@@ -75,54 +75,16 @@ def bootstrap_mean_ci(series: pd.Series, level: float = 0.95, n_boot: int = 5000
     )
 
 
-def normality_tests(series: pd.Series, name: str) -> pd.DataFrame:
-    x = clean_numeric(series)
-    # D'Agostino funciona bien en muestras grandes. Shapiro se limita por tamano.
-    dag = stats.normaltest(x)
-    ks = stats.kstest((x - x.mean()) / x.std(ddof=1), "norm")
-    return pd.DataFrame(
-        [
-            {"variable": name, "prueba": "D'Agostino-Pearson", "estadistico": dag.statistic, "p_value": dag.pvalue},
-            {"variable": name, "prueba": "Kolmogorov-Smirnov estandarizado", "estadistico": ks.statistic, "p_value": ks.pvalue},
-        ]
-    )
-
-
-def distribution_fit(series: pd.Series) -> pd.DataFrame:
-    x = clean_numeric(series)
-    rows = []
-
-    candidates = {
-        "normal": stats.norm.fit(x),
-        "lognormal": stats.lognorm.fit(x, floc=0) if (x > 0).all() else None,
-        "gamma": stats.gamma.fit(x, floc=0) if (x > 0).all() else None,
-    }
-
-    for name, params in candidates.items():
-        if params is None:
-            continue
-        dist = {"normal": stats.norm, "lognormal": stats.lognorm, "gamma": stats.gamma}[name]
-        ks = stats.kstest(x, dist.cdf, args=params)
-        rows.append(
-            {
-                "distribucion": name,
-                "parametros": "; ".join(f"{p:.6g}" for p in params),
-                "ks_estadistico": ks.statistic,
-                "p_value": ks.pvalue,
-            }
-        )
-    return pd.DataFrame(rows).sort_values("ks_estadistico")
-
-
-def chi_square_distribution_fit(series: pd.Series, bins: int = 12) -> pd.DataFrame:
+def chi_square_distribution_fit(series: pd.Series, bins: int = 12) -> tuple[pd.DataFrame, dict[str, pd.DataFrame]]:
     x = clean_numeric(series)
     n = len(x)
     candidates = {
-        "normal": (stats.norm, stats.norm.fit(x), 2),
-        "lognormal": (stats.lognorm, stats.lognorm.fit(x, floc=0), 3) if (x > 0).all() else None,
-        "gamma": (stats.gamma, stats.gamma.fit(x, floc=0), 3) if (x > 0).all() else None,
+        "Normal": (stats.norm, stats.norm.fit(x), 2),
+        "Log-normal": (stats.lognorm, stats.lognorm.fit(x, floc=0), 3) if (x > 0).all() else None,
+        "Gamma": (stats.gamma, stats.gamma.fit(x, floc=0), 3) if (x > 0).all() else None,
     }
     rows = []
+    class_tables: dict[str, pd.DataFrame] = {}
     for name, item in candidates.items():
         if item is None:
             continue
@@ -135,17 +97,30 @@ def chi_square_distribution_fit(series: pd.Series, bins: int = 12) -> pd.DataFra
         expected = np.full(bins, n / bins)
         statistic = float(((observed - expected) ** 2 / expected).sum())
         dof = max(bins - 1 - estimated_params, 1)
+        p_value = stats.chi2.sf(statistic, dof)
         rows.append(
             {
                 "distribucion": name,
                 "clases": bins,
+                "parametros_estimados": estimated_params,
                 "frecuencia_esperada_minima": expected.min(),
                 "grados_libertad": dof,
                 "chi2_estadistico": statistic,
-                "p_value": stats.chi2.sf(statistic, dof),
+                "p_value": p_value,
+                "decision_alpha_0_05": "Se rechaza H0" if p_value < 0.05 else "No se rechaza H0",
             }
         )
-    return pd.DataFrame(rows).sort_values("chi2_estadistico")
+        class_tables[name] = pd.DataFrame(
+            {
+                "clase": range(1, bins + 1),
+                "limite_inferior": edges[:-1],
+                "limite_superior": edges[1:],
+                "frecuencia_observada": observed,
+                "frecuencia_esperada": expected,
+                "aporte_chi2": (observed - expected) ** 2 / expected,
+            }
+        )
+    return pd.DataFrame(rows).sort_values("chi2_estadistico"), class_tables
 
 
 def correlation_tests(df: pd.DataFrame) -> pd.DataFrame:
@@ -158,8 +133,8 @@ def correlation_tests(df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for a, b in pairs:
         clean = df[[a, b]].dropna()
-        r, p = stats.pearsonr(clean[a], clean[b])
-        rows.append({"variable_x": a, "variable_y": b, "pearson_r": r, "p_value": p, "n": len(clean)})
+        r = clean[a].corr(clean[b])
+        rows.append({"variable_x": a, "variable_y": b, "pearson_r": r, "n": len(clean)})
     return pd.DataFrame(rows)
 
 
@@ -173,29 +148,27 @@ def autocorrelation_table(series: pd.Series, nlags: int = 20) -> pd.DataFrame:
     return pd.DataFrame({"lag": range(nlags + 1), "autocorrelacion": values})
 
 
+def selected_autocorrelations(series: pd.Series, lags: list[int] | None = None) -> pd.DataFrame:
+    if lags is None:
+        lags = [1, 2, 5, 10, 20, 30]
+    acf = autocorrelation_table(series, max(lags))
+    return acf[acf["lag"].isin(lags)].reset_index(drop=True)
+
+
 def generate_inference_tables() -> dict[str, pd.DataFrame]:
     ensure_output_dirs()
     df = load_dataset()
     cambio = df["uyu_por_brl"]
-    log_ret = df["log_retorno_brl_por_uyu"]
+    chi2_summary, chi2_classes = chi_square_distribution_fit(cambio)
 
     tables = {
         "ic_media_uyu_por_brl": mean_confidence_intervals(cambio),
         "ic_varianza_uyu_por_brl": variance_confidence_intervals(cambio),
-        "ic_media_log_retornos": mean_confidence_intervals(log_ret),
-        "ic_varianza_log_retornos": variance_confidence_intervals(log_ret),
         "bootstrap_media_uyu_por_brl": bootstrap_mean_ci(cambio),
-        "normalidad": pd.concat(
-            [
-                normality_tests(cambio, "uyu_por_brl"),
-                normality_tests(log_ret, "log_retorno_brl_por_uyu"),
-            ],
-            ignore_index=True,
-        ),
-        "bondad_ajuste_uyu_por_brl": distribution_fit(cambio),
-        "bondad_ajuste_chi2_uyu_por_brl": chi_square_distribution_fit(cambio),
+        "bondad_ajuste_chi2_uyu_por_brl": chi2_summary,
+        "bondad_ajuste_chi2_clases_lognormal": chi2_classes["Log-normal"],
         "correlaciones": correlation_tests(df),
-        "autocorrelacion_log_retornos": autocorrelation_table(log_ret),
+        "autocorrelacion_uyu_por_brl": selected_autocorrelations(cambio),
     }
 
     for name, table in tables.items():

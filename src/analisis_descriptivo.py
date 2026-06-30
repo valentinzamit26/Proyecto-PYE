@@ -22,7 +22,6 @@ def descriptive_metrics(series: pd.Series) -> pd.DataFrame:
         ("minimo", x.min()),
         ("maximo", x.max()),
         ("rango", x.max() - x.min()),
-        ("coeficiente_variacion", x.std(ddof=1) / x.mean()),
         ("asimetria", x.skew()),
         ("curtosis", x.kurt()),
         ("limite_outlier_inferior", lower),
@@ -52,17 +51,14 @@ def generate_tables() -> dict[str, pd.DataFrame]:
     nulos.columns = ["variable", "nulos"]
 
     descriptivo_cambio = descriptive_metrics(df["uyu_por_brl"])
-    descriptivo_retornos = descriptive_metrics(df["log_retorno_brl_por_uyu"])
-    descriptivo_retornos_uyu = descriptive_metrics(df["log_retorno_uyu_por_brl"])
-
     anual = (
         df.assign(anio=df["fecha"].dt.year)
         .groupby("anio", as_index=False)
         .agg(
             media_uyu_por_brl=("uyu_por_brl", "mean"),
             desvio_uyu_por_brl=("uyu_por_brl", "std"),
-            media_log_retorno=("log_retorno_brl_por_uyu", "mean"),
-            desvio_log_retorno=("log_retorno_brl_por_uyu", "std"),
+            minimo_uyu_por_brl=("uyu_por_brl", "min"),
+            maximo_uyu_por_brl=("uyu_por_brl", "max"),
             observaciones=("uyu_por_brl", "count"),
         )
     )
@@ -71,8 +67,6 @@ def generate_tables() -> dict[str, pd.DataFrame]:
         "resumen_dataset": resumen,
         "nulos": nulos,
         "descriptivo_uyu_por_brl": descriptivo_cambio,
-        "descriptivo_log_retornos": descriptivo_retornos,
-        "descriptivo_log_retornos_uyu_por_brl": descriptivo_retornos_uyu,
         "resumen_anual": anual,
     }.items():
         table.to_csv(TABLES_DIR / f"{name}.csv", index=False)
@@ -81,8 +75,6 @@ def generate_tables() -> dict[str, pd.DataFrame]:
         "resumen": resumen,
         "nulos": nulos,
         "descriptivo_cambio": descriptivo_cambio,
-        "descriptivo_retornos": descriptivo_retornos,
-        "descriptivo_retornos_uyu": descriptivo_retornos_uyu,
         "anual": anual,
     }
 
