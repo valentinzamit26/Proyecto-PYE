@@ -6,15 +6,15 @@ La Normal y la Gamma están desarrolladas formalmente en los teóricos de variab
 
 La distribución empírica se observó primero mediante histogramas y Q-Q plots. El histograma permite mirar frecuencias por clases; el Q-Q plot permite comparar cuantiles observados contra cuantiles teóricos.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}{0.47\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{hist_uyu_por_brl.png}
         \caption{Histograma de UYU/BRL}
         \label{fig:hist-ajuste}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.47\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{qq_uyu_por_brl.png}
         \caption{Q-Q plot frente a Normal}
         \label{fig:qq-cambio}
@@ -31,7 +31,7 @@ La prueba principal de bondad de ajuste fue chi-cuadrado, porque coincide con el
 
 Los grados de libertad se calcularon como \(gl = K - 1 - n_p\), donde \(n_p\) es la cantidad de parámetros estimados para cada distribución. La frecuencia esperada mínima fue mayor que 5 en todos los casos, por lo que se cumple la condición práctica señalada en el teórico de bondad de ajuste \cite{curso_bondad}.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \small
 \caption{Prueba chi-cuadrado de bondad de ajuste para la cotización UYU/BRL.}
@@ -59,7 +59,7 @@ H_1: \text{el modelo no es adecuado para representar la distribución de la pobl
 
 Con \(\alpha=0.05\), las tres distribuciones fueron rechazadas como modelos adecuados en sentido estricto. Sin embargo, la Log-normal presentó el menor estadístico chi-cuadrado, por lo que se considera el mejor ajuste relativo entre las candidatas evaluadas. La segunda mejor fue la Gamma. Esta conclusión no significa que la cotización siga exactamente una distribución Log-normal; significa que, entre los modelos comparados, fue el que quedó más cerca de las frecuencias observadas.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \footnotesize
 \caption{Frecuencias observadas y esperadas bajo el ajuste Log-normal.}
@@ -85,4 +85,3 @@ Clase & Frecuencia observada & Frecuencia esperada & Aporte \(\chi^2\) \\
 \end{table}
 
 La Tabla \ref{tab:clases-lognormal} muestra por qué, aun siendo el mejor ajuste relativo, la Log-normal no resulta aceptada como modelo exacto: algunas clases presentan diferencias importantes entre frecuencias observadas y esperadas.
-
