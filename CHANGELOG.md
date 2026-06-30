@@ -13,6 +13,7 @@
 - Alineacion metodologica final: Python queda indicado como herramienta computacional, se elimina inferencia externa al curso, se prioriza bondad de ajuste chi-cuadrado y se documenta el ajuste relativo Log-normal con Gamma como segunda candidata.
 - Incorporacion de moda, diagramas con rezagos, autocorrelaciones seleccionadas de la cotizacion UYU/BRL y advertencias sobre dependencia temporal en los intervalos de confianza.
 - Actualizacion del notebook de Google Colab para reproducir el analisis final sin pruebas ajenas al enfoque aprobado ni variables derivadas como eje del proyecto.
+- Ajuste de maquetacion LaTeX: portada corregida, menor espaciado entre flotantes y ubicacion mas compacta de figuras y tablas.
 - PDF final pendiente de compilacion local u Overleaf porque no hay compilador LaTeX instalado en este entorno.
 
 ## v0.10 - 2026-06-18
