@@ -1,48 +1,88 @@
-\section{Distribución teórica}
+\section{Distribución teórica y bondad de ajuste}
 
-En el curso, una variable aleatoria continua se describe mediante una función de densidad de probabilidad \(f_X(x)\), no negativa y vinculada al cálculo de probabilidades mediante áreas bajo la curva \cite{curso_continuas}. La cotización \texttt{uyu\_por\_brl} es positiva y continua, por lo que se compararon distribuciones teóricas candidatas con soporte adecuado o de uso frecuente: Normal, Log-normal y Gamma.
+En el curso, una variable aleatoria continua se describe mediante una función de densidad de probabilidad \(f_X(x)\), no negativa y vinculada al cálculo de probabilidades mediante áreas bajo la curva \cite{curso_continuas}. La cotización \texttt{uyu\_por\_brl} es positiva y continua, por lo que se compararon distribuciones candidatas compatibles con ese tipo de variable: Normal, Gamma y Log-normal.
 
-La distribución empírica se observó primero mediante histogramas y Q-Q plots. El histograma permite mirar frecuencias por clases; el Q-Q plot permite comparar cuantiles observados contra cuantiles teóricos. Sin embargo, al tratarse de una serie temporal, ajustar una distribución a los valores marginales no modela automáticamente la dependencia temporal.
+La Normal y la Gamma están desarrolladas formalmente en los teóricos de variables continuas. La Log-normal se incluye porque aparece como posible modelo en el material de bondad de ajuste y porque la variable observada es positiva y presenta asimetría hacia la derecha. En este informe, por tanto, la Log-normal se interpreta como candidata de comparación empírica, no como una distribución desarrollada con el mismo nivel de detalle que las otras.
+
+La distribución empírica se observó primero mediante histogramas y Q-Q plots. El histograma permite mirar frecuencias por clases; el Q-Q plot permite comparar cuantiles observados contra cuantiles teóricos.
 
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{qq_uyu_por_brl.png}
-        \caption{Cotización UYU/BRL}
-        \label{fig:qq-cambio}
+    \begin{subfigure}{0.47\textwidth}
+        \includegraphics[width=\textwidth]{hist_uyu_por_brl.png}
+        \caption{Histograma de UYU/BRL}
+        \label{fig:hist-ajuste}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{hist_log_retornos.png}
-        \caption{Log-retornos}
-        \label{fig:hist-retornos}
+    \begin{subfigure}{0.47\textwidth}
+        \includegraphics[width=\textwidth]{qq_uyu_por_brl.png}
+        \caption{Q-Q plot frente a Normal}
+        \label{fig:qq-cambio}
     \end{subfigure}
-    \caption{Comparación visual del nivel de la cotización y de sus log-retornos. Fuente: elaboración propia a partir de Yahoo Finance.}
+    \caption{Distribución empírica y comparación visual con una distribución teórica. Fuente: elaboración propia a partir de Yahoo Finance.}
     \label{fig:modelado-visual}
 \end{figure}
+
+La prueba principal de bondad de ajuste fue chi-cuadrado, porque coincide con el procedimiento trabajado en el curso. Para cada distribución se agruparon los datos en \(K=12\) clases y se compararon las frecuencias observadas \(O_k\) con las frecuencias teóricas esperadas \(T_k\). El estadístico utilizado fue:
+
+\[
+    E = \sum_{k=1}^{K} \frac{(O_k - T_k)^2}{T_k}.
+\]
+
+Los grados de libertad se calcularon como \(gl = K - 1 - n_p\), donde \(n_p\) es la cantidad de parámetros estimados para cada distribución. La frecuencia esperada mínima fue mayor que 5 en todos los casos, por lo que se cumple la condición práctica señalada en el teórico de bondad de ajuste \cite{curso_bondad}.
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{Bondad de ajuste de distribuciones candidatas para UYU/BRL.}
-\label{tab:bondad-compacta}
-\begin{tabular}{lrr}
+\caption{Prueba chi-cuadrado de bondad de ajuste para la cotización UYU/BRL.}
+\label{tab:bondad-chi2}
+\begin{tabular}{lrrrrl}
 \toprule
-Distribución & KS & \(p\)-value KS \\
+Distribución & Parámetros & gl & \(\chi^2\) & p-value & Decisión \\
 \midrule
-Log-normal & 0.0763 & \(6.90\times10^{-27}\) \\
-Gamma & 0.0866 & \(1.54\times10^{-34}\) \\
-Normal & 0.1064 & \(5.67\times10^{-52}\) \\
+Log-normal & 3 & 8 & 1064.46 & \(p<0.001\) & Se rechaza \(H_0\) \\
+Gamma & 3 & 8 & 1324.75 & \(p<0.001\) & Se rechaza \(H_0\) \\
+Normal & 2 & 9 & 1817.23 & \(p<0.001\) & Se rechaza \(H_0\) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Como complemento, se aplicó una prueba chi-cuadrado de bondad de ajuste. Según el material del curso, este procedimiento compara frecuencias observadas con frecuencias esperadas por clase y utiliza un estadístico de la forma:
+Para esta prueba se plantea:
 
 \[
-    E = \sum_{k=1}^{K} \frac{(O_k - T_k)^2}{T_k},
+H_0: \text{el modelo es adecuado para representar la distribución de la población}
 \]
 
-donde \(O_k\) es la frecuencia observada y \(T_k\) la frecuencia teórica esperada en la clase \(k\). La prueba requiere que las frecuencias esperadas sean suficientemente grandes; el curso señala como referencia que sean mayores o iguales a 5 \cite{curso_bondad}.
+\[
+H_1: \text{el modelo no es adecuado para representar la distribución de la población}.
+\]
 
-Según el criterio KS, la mejor distribución relativa entre las candidatas evaluadas fue \MejorDistribucion{}, con estadístico \MejorDistribucionKS{} y p-value \MejorDistribucionP{}. La prueba chi-cuadrado también ubicó a \MejorDistribucionChi{} como el ajuste relativo más favorable, aunque con p-value \MejorDistribucionChiP{}. Por lo tanto, la evidencia no permite afirmar que la distribución sea exacta; solamente indica qué modelo presenta mejor desempeño relativo entre los evaluados. Los resultados completos de chi-cuadrado quedan en \texttt{outputs/tables/}.
+Con \(\alpha=0.05\), las tres distribuciones fueron rechazadas como modelos adecuados en sentido estricto. Sin embargo, la Log-normal presentó el menor estadístico chi-cuadrado, por lo que se considera el mejor ajuste relativo entre las candidatas evaluadas. La segunda mejor fue la Gamma. Esta conclusión no significa que la cotización siga exactamente una distribución Log-normal; significa que, entre los modelos comparados, fue el que quedó más cerca de las frecuencias observadas.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Frecuencias observadas y esperadas bajo el ajuste Log-normal.}
+\label{tab:clases-lognormal}
+\begin{tabular}{rrrr}
+\toprule
+Clase & Frecuencia observada & Frecuencia esperada & Aporte \(\chi^2\) \\
+\midrule
+1 & 258 & 435.33 & 72.24 \\
+2 & 818 & 435.33 & 336.37 \\
+3 & 587 & 435.33 & 52.85 \\
+4 & 337 & 435.33 & 22.21 \\
+5 & 485 & 435.33 & 5.67 \\
+6 & 497 & 435.33 & 8.73 \\
+7 & 298 & 435.33 & 43.31 \\
+8 & 149 & 435.33 & 188.27 \\
+9 & 178 & 435.33 & 152.09 \\
+10 & 415 & 435.33 & 0.95 \\
+11 & 491 & 435.33 & 7.12 \\
+12 & 711 & 435.33 & 174.66 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La Tabla \ref{tab:clases-lognormal} muestra por qué, aun siendo el mejor ajuste relativo, la Log-normal no resulta aceptada como modelo exacto: algunas clases presentan diferencias importantes entre frecuencias observadas y esperadas.
+

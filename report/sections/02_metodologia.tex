@@ -18,22 +18,17 @@ Siguiendo la distinción trabajada en el curso entre población, muestra y tama�
 
 La muestra no debe tratarse como una muestra aleatoria simple. Es una serie histórica observacional, por lo que el supuesto de independencia entre observaciones requiere revisión antes de aplicar métodos inferenciales clásicos.
 
-\subsection{Variable principal y variables complementarias}
+\subsection{Variable principal y preparación de datos}
 
 La variable principal es \texttt{uyu\_por\_brl}, interpretada como pesos uruguayos necesarios para comprar un real brasileño. Es una variable cuantitativa continua, ya que puede tomar valores decimales dentro de un intervalo de números reales. En términos del curso, puede estudiarse mediante una distribución empírica y, eventualmente, aproximarse mediante una función de densidad de probabilidad (FDP) teórica \cite{curso_continuas}.
 
-El archivo original contiene siete columnas: \texttt{fecha}, \texttt{brl\_por\_usd}, \texttt{uyu\_por\_usd}, \texttt{brl\_por\_uyu}, \texttt{uyu\_por\_brl}, \texttt{retorno\_diario\_brl\_por\_uyu} y \texttt{log\_retorno\_brl\_por\_uyu}. El pipeline reproducible agrega dos variables derivadas para la cotización principal: \texttt{retorno\_diario\_uyu\_por\_brl} y \texttt{log\_retorno\_uyu\_por\_brl}; por eso las tablas generadas informan \TotalVariables{} variables.
+El proceso de preparación incluyó conversión de \texttt{fecha} a formato temporal, ordenamiento cronológico, validación de columnas esperadas, conteo de valores nulos y verificación de duplicados. No se detectaron fechas duplicadas: \DuplicadosFecha{}. También se verificó que \texttt{uyu\_por\_brl} y \texttt{brl\_por\_uyu} fueran recíprocas. El máximo error absoluto observado en el producto \(\text{UYU/BRL}\times\text{BRL/UYU}\) fue \MaxErrorProductoInverso{}, compatible con error numérico de redondeo.
 
-\subsection{Preparación y validación}
+\subsection{Métodos estadísticos y herramientas}
 
-El proceso de preparación incluyó conversión de \texttt{fecha} a formato temporal, ordenamiento cronológico, validación de columnas esperadas, conteo de valores nulos y verificación de duplicados. El total de nulos detectado luego de crear retornos fue \NulosTotales{}, asociado al primer valor no definido de las series de retornos. No se detectaron fechas duplicadas: \DuplicadosFecha{}.
+Python, \texttt{pandas}, \texttt{numpy} y \texttt{matplotlib} fueron utilizados como herramientas computacionales. No se consideran métodos estadísticos, sino recursos para aplicar los procedimientos del curso y generar cálculos, tablas y gráficos reproducibles.
 
-También se verificó que \texttt{uyu\_por\_brl} y \texttt{brl\_por\_uyu} fueran recíprocas. El máximo error absoluto observado en el producto \(\text{UYU/BRL}\times\text{BRL/UYU}\) fue \MaxErrorProductoInverso{}, compatible con error numérico de redondeo.
+Los métodos estadísticos aplicados fueron: análisis descriptivo, histogramas, boxplots, diagramas de dispersión, autocorrelación, correlación de Pearson, prueba chi-cuadrado de bondad de ajuste e intervalos de confianza para media y varianza. La comparación de distribuciones se concentró en Normal, Gamma y Log-normal. La Log-normal se incluye porque aparece como posible modelo en el material de bondad de ajuste y porque la variable es positiva y presenta asimetría.
 
-\subsection{Métodos estadísticos}
+Las principales limitaciones metodológicas son la posible dependencia temporal, la ausencia de muestreo aleatorio simple y el hecho de que \texttt{uyu\_por\_brl} se construye algebraicamente a partir de \texttt{uyu\_por\_usd} y \texttt{brl\_por\_usd}. Por tanto, las asociaciones observadas no deben interpretarse como causalidad.
 
-El análisis se desarrolló con Python, \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib}, \texttt{scipy}, \texttt{statsmodels}, Jupyter/Colab y LaTeX. Se aplicaron medidas de media, mediana, cuartiles, IQR, varianza, desvío estándar, coeficiente de variación, asimetría y curtosis. Para la exploración gráfica se utilizaron serie temporal, histograma, boxplot, Q-Q plot, autocorrelación y volatilidad móvil.
-
-La inferencia se construyó tomando como referencia las distribuciones muestrales de estadísticos vistas en el curso \cite{curso_muestreo}. Se calcularon intervalos de confianza para media y varianza, comparando el enfoque clásico con un intervalo bootstrap para la media. Para el ajuste de distribuciones se compararon modelos continuos positivos o de uso frecuente, y se aplicaron pruebas de bondad de ajuste, incluyendo chi-cuadrado según el enfoque de frecuencias observadas y esperadas \cite{curso_bondad}.
-
-Las principales limitaciones son la posible dependencia temporal, la no estacionariedad, cambios de comportamiento económico dentro del período y el hecho de que \texttt{uyu\_por\_brl} se construye algebraicamente a partir de \texttt{uyu\_por\_usd} y \texttt{brl\_por\_usd}. Por tanto, las asociaciones observadas no deben interpretarse como causalidad.

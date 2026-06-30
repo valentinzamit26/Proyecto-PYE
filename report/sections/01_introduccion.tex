@@ -2,24 +2,20 @@
 
 El curso de Probabilidad y Estadística organiza el trabajo estadístico como un proceso que parte de la identificación del fenómeno, continúa con la recolección y exploración de datos, y culmina con una etapa de inferencia apoyada en modelos probabilísticos \cite{curso_intro}. En este marco, el presente informe analiza el tipo de cambio entre el peso uruguayo y el real brasileño, expresado como la cantidad de pesos uruguayos necesarios para comprar un real brasileño.
 
-El fenómeno resulta relevante para Uruguay por la cercanía económica y regional con Brasil. Las variaciones del real frente al peso pueden incidir en decisiones vinculadas al turismo, al comercio, a compras transfronterizas y a la comparación de precios entre ambos países. Desde el punto de vista estadístico, se trata de una variable cuantitativa continua observada en el tiempo, por lo que permite aplicar herramientas de análisis exploratorio, distribución empírica, modelización probabilística, intervalos de confianza y pruebas de hipótesis.
+El fenómeno resulta relevante para Uruguay por la cercanía económica y regional con Brasil. Las variaciones del real frente al peso pueden incidir en decisiones vinculadas al turismo, al comercio, a compras transfronterizas y a la comparación de precios entre ambos países. Desde el punto de vista estadístico, se trata de una variable cuantitativa continua observada en el tiempo, por lo que permite aplicar herramientas de análisis exploratorio, distribución empírica, modelización probabilística, intervalos de confianza y análisis de autocorrelación.
 
-La variable principal es \texttt{uyu\_por\_brl}. Si se denota por \(X\) la cotización diaria UYU/BRL, cada observación representa el valor observado de esa variable en una fecha para la cual existen simultáneamente las cotizaciones necesarias. La pregunta principal del trabajo es: \textit{¿cuál es el comportamiento estadístico del tipo de cambio entre el peso uruguayo y el real brasileño durante el período analizado, y qué características presentan su distribución, variabilidad y dependencia temporal?}
+La variable principal es \texttt{uyu\_por\_brl}. Si se denota por \(X_t\) la cotización diaria UYU/BRL en el instante \(t\), cada observación representa el valor de esa variable en una fecha para la cual existen simultáneamente las cotizaciones necesarias. La pregunta principal del trabajo es: \textit{¿cuál es el comportamiento estadístico del tipo de cambio entre el peso uruguayo y el real brasileño durante el período analizado, y qué características presentan su distribución, variabilidad y dependencia temporal?}
 
 El objetivo general es analizar estadísticamente el comportamiento del tipo de cambio entre el peso uruguayo y el real brasileño, evaluando su distribución empírica, su posible modelado probabilístico, su evolución temporal y la incertidumbre asociada a sus principales parámetros.
 
 Los objetivos específicos son:
 
 \begin{itemize}
-    \item describir la variable \texttt{uyu\_por\_brl} mediante medidas de tendencia central, posición y dispersión;
-    \item representar gráficamente la evolución temporal y la distribución empírica de la cotización;
-    \item identificar posibles valores atípicos mediante criterios basados en cuartiles e IQR;
-    \item distinguir el análisis del nivel de la cotización y el análisis de retornos;
-    \item analizar autocorrelación para evaluar dependencia temporal;
-    \item comparar distribuciones teóricas candidatas para una variable continua positiva;
-    \item construir intervalos de confianza para media y varianza;
-    \item formular pruebas de hipótesis e interpretar p-values sin afirmar causalidad.
+    \item describir la cotización UYU/BRL mediante medidas de tendencia central, dispersión y posición, junto con histogramas y boxplots;
+    \item analizar el comportamiento temporal de la cotización mediante gráficos, diagramas con rezagos y autocorrelaciones;
+    \item evaluar qué distribución teórica se ajusta mejor a los datos usando histogramas, Q-Q plots y prueba chi-cuadrado de bondad de ajuste;
+    \item construir e interpretar intervalos de confianza para la media y la varianza, considerando distintos niveles de confianza y los supuestos necesarios.
 \end{itemize}
 
-El informe se estructura en ocho secciones. Luego de la introducción se presenta la metodología de construcción y preparación de datos. Después se desarrolla el análisis descriptivo, la evaluación de distribuciones teóricas, los intervalos de confianza, las pruebas de hipótesis, la discusión y las conclusiones.
+El informe se estructura en ocho secciones. Luego de la introducción se presenta la metodología de construcción y preparación de datos. Después se desarrolla el análisis descriptivo, el análisis temporal, la evaluación de distribuciones teóricas, los intervalos de confianza, la discusión y las conclusiones.
 

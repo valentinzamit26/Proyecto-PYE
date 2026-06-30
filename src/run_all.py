@@ -25,6 +25,13 @@ def metric_value(table: pd.DataFrame, key: str) -> float:
     return float(table.loc[table["medida"] == key, "valor"].iloc[0])
 
 
+def exact_modes(series: pd.Series) -> tuple[list[float], int]:
+    counts = series.dropna().value_counts()
+    max_count = int(counts.max())
+    values = sorted(float(v) for v in counts[counts == max_count].index)
+    return values, max_count
+
+
 def write_latex_table(df: pd.DataFrame, path: Path, caption: str, label: str, max_rows: int | None = None) -> None:
     view = df.copy()
     if max_rows is not None:
@@ -63,13 +70,15 @@ def write_latex_table(df: pd.DataFrame, path: Path, caption: str, label: str, ma
 def write_result_macros(descriptive: dict[str, pd.DataFrame], inference: dict[str, pd.DataFrame], figures: list[str]) -> None:
     df = load_dataset()
     cambio = descriptive["descriptivo_cambio"]
-    ret = descriptive["descriptivo_retornos"]
     boot = inference["bootstrap_media_uyu_por_brl"].iloc[0]
     corr = inference["correlaciones"]
     corr_brl_uyu = corr[(corr["variable_x"] == "brl_por_usd") & (corr["variable_y"] == "uyu_por_usd")].iloc[0]
-    fit = inference["bondad_ajuste_uyu_por_brl"].iloc[0]
-    chi2_fit = inference["bondad_ajuste_chi2_uyu_por_brl"].iloc[0]
+    chi2_table = inference["bondad_ajuste_chi2_uyu_por_brl"]
+    chi2_fit = chi2_table.iloc[0]
+    chi2_second = chi2_table.iloc[1]
+    acf = inference["autocorrelacion_uyu_por_brl"].set_index("lag")["autocorrelacion"]
     resumen_lookup = dict(zip(descriptive["resumen"]["indicador"], descriptive["resumen"]["valor"]))
+    modes, mode_freq = exact_modes(df["uyu_por_brl"])
 
     macros = {
         "TotalRegistros": len(df),
@@ -81,25 +90,33 @@ def write_result_macros(descriptive: dict[str, pd.DataFrame], inference: dict[st
         "MaxErrorProductoInverso": format_float(float(resumen_lookup.get("max_error_producto_inverso", 0)), 8),
         "MediaCambio": format_float(metric_value(cambio, "media"), 4),
         "MedianaCambio": format_float(metric_value(cambio, "mediana"), 4),
+        "ModaCambioUno": format_float(modes[0], 4),
+        "ModaCambioDos": format_float(modes[1], 4) if len(modes) > 1 else format_float(modes[0], 4),
+        "FrecuenciaModaCambio": mode_freq,
         "DesvioCambio": format_float(metric_value(cambio, "desvio_estandar_muestral"), 4),
         "VarianzaCambio": format_float(metric_value(cambio, "varianza_muestral"), 4),
         "QunoCambio": format_float(metric_value(cambio, "q1"), 4),
         "QtresCambio": format_float(metric_value(cambio, "q3"), 4),
         "IqrCambio": format_float(metric_value(cambio, "iqr"), 4),
-        "CoefVariacionCambio": format_float(metric_value(cambio, "coeficiente_variacion"), 4),
         "AsimetriaCambio": format_float(metric_value(cambio, "asimetria"), 4),
         "CurtosisCambio": format_float(metric_value(cambio, "curtosis"), 4),
         "OutliersCambio": int(metric_value(cambio, "cantidad_outliers_iqr")),
-        "MediaLogRet": format_float(metric_value(ret, "media"), 6),
-        "DesvioLogRet": format_float(metric_value(ret, "desvio_estandar_muestral"), 6),
         "BootstrapMediaInf": format_float(boot["limite_inferior"], 4),
         "BootstrapMediaSup": format_float(boot["limite_superior"], 4),
         "CorrBrlUsdUyuUsd": format_float(corr_brl_uyu["pearson_r"], 4),
-        "MejorDistribucion": tex_escape(fit["distribucion"]),
-        "MejorDistribucionKS": format_float(fit["ks_estadistico"], 4),
-        "MejorDistribucionP": format_float(fit["p_value"], 6),
         "MejorDistribucionChi": tex_escape(chi2_fit["distribucion"]),
-        "MejorDistribucionChiP": format_float(chi2_fit["p_value"], 6),
+        "MejorDistribucionChiEst": format_float(chi2_fit["chi2_estadistico"], 2),
+        "MejorDistribucionChiGl": int(chi2_fit["grados_libertad"]),
+        "MejorDistribucionChiP": "p<0.001" if chi2_fit["p_value"] < 0.001 else format_float(chi2_fit["p_value"], 4),
+        "SegundaDistribucionChi": tex_escape(chi2_second["distribucion"]),
+        "SegundaDistribucionChiEst": format_float(chi2_second["chi2_estadistico"], 2),
+        "SegundaDistribucionChiGl": int(chi2_second["grados_libertad"]),
+        "AcfLagUno": format_float(acf.loc[1], 4),
+        "AcfLagDos": format_float(acf.loc[2], 4),
+        "AcfLagCinco": format_float(acf.loc[5], 4),
+        "AcfLagDiez": format_float(acf.loc[10], 4),
+        "AcfLagVeinte": format_float(acf.loc[20], 4),
+        "AcfLagTreinta": format_float(acf.loc[30], 4),
         "CantidadFiguras": len(figures),
     }
 
@@ -129,22 +146,16 @@ def write_latex_fragments(descriptive: dict[str, pd.DataFrame], inference: dict[
         "tab:ic-varianza-cambio",
     )
     write_latex_table(
-        inference["bondad_ajuste_uyu_por_brl"],
-        TABLES_DIR / "bondad_ajuste_uyu_por_brl.tex",
-        "Comparacion de distribuciones candidatas mediante prueba KS.",
-        "tab:bondad-ajuste",
-    )
-    write_latex_table(
         inference["bondad_ajuste_chi2_uyu_por_brl"],
         TABLES_DIR / "bondad_ajuste_chi2_uyu_por_brl.tex",
         "Comparacion de distribuciones candidatas mediante prueba chi-cuadrado.",
         "tab:bondad-ajuste-chi2",
     )
     write_latex_table(
-        inference["normalidad"],
-        TABLES_DIR / "normalidad.tex",
-        "Pruebas de normalidad para la cotizacion y los log-retornos.",
-        "tab:normalidad",
+        inference["bondad_ajuste_chi2_clases_lognormal"],
+        TABLES_DIR / "bondad_ajuste_chi2_clases_lognormal.tex",
+        "Frecuencias observadas y esperadas para el ajuste Log-normal.",
+        "tab:bondad-ajuste-clases-lognormal",
     )
     write_latex_table(
         inference["correlaciones"],
@@ -153,11 +164,10 @@ def write_latex_fragments(descriptive: dict[str, pd.DataFrame], inference: dict[
         "tab:correlaciones",
     )
     write_latex_table(
-        inference["autocorrelacion_log_retornos"],
-        TABLES_DIR / "autocorrelacion_log_retornos.tex",
-        "Autocorrelacion de log-retornos para los primeros rezagos.",
-        "tab:autocorrelacion",
-        max_rows=11,
+        inference["autocorrelacion_uyu_por_brl"],
+        TABLES_DIR / "autocorrelacion_uyu_por_brl.tex",
+        "Autocorrelaciones seleccionadas de la cotizacion UYU/BRL.",
+        "tab:autocorrelacion-cambio",
     )
 
 

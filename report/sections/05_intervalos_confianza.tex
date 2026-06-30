@@ -36,4 +36,15 @@ Varianza & [2.2655; 2.4162] & [2.2517; 2.4313] & [2.2252; 2.4612] \\
 
 Al aumentar el nivel de confianza, aumenta la amplitud del intervalo. Esto ocurre porque el procedimiento exige un rango más amplio de valores compatibles con el parámetro. La interpretación correcta no es que exista una probabilidad del 95\% de que el parámetro fijo esté dentro del intervalo ya calculado, sino que el método produce intervalos que, en repeticiones del muestreo bajo sus supuestos, cubren el parámetro con esa frecuencia aproximada.
 
-También se calculó un intervalo bootstrap percentil al 95\% para la media: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap aporta una alternativa empírica, pero en series temporales el remuestreo simple puede romper la dependencia entre observaciones. Por este motivo, una extensión metodológica más adecuada sería implementar bootstrap por bloques.
+El tamaño muestral también influye directamente en la amplitud. En el intervalo para la media, el margen de error tiene la forma:
+
+\[
+    h = t_{\alpha/2,n-1}\frac{s}{\sqrt{n}}.
+\]
+
+Por lo tanto, al aumentar \(n\), crece \(\sqrt{n}\) en el denominador y disminuye el margen de error. Con una muestra de \TotalRegistros{} observaciones, los intervalos para la media resultan estrechos. Sin embargo, esta lectura debe matizarse porque las observaciones presentan autocorrelación y no provienen de un muestreo aleatorio simple.
+
+También se calculó un intervalo bootstrap percentil al 95\% para la media: [\BootstrapMediaInf{}; \BootstrapMediaSup{}]. El bootstrap se incluye porque la consigna permite utilizar métodos empíricos cuando los supuestos clásicos no son plenamente válidos.
+
+El intervalo clásico para la varianza se presenta como aplicación del procedimiento del curso. Sin embargo, su validez debe interpretarse con cautela, porque depende del supuesto de normalidad y de muestra aleatoria, condiciones que no se cumplen plenamente en una serie temporal con autocorrelación.
+

@@ -1,35 +1,38 @@
 \section{Análisis descriptivo}
 
-El análisis exploratorio de datos permite describir la distribución empírica antes de proponer un modelo probabilístico. En los materiales del curso se enfatiza que cuartiles, IQR, boxplot e histograma permiten estudiar concentración, variabilidad y valores atípicos \cite{curso_eda}. La Tabla \ref{tab:resumen-descriptivo} resume las medidas principales de \texttt{uyu\_por\_brl}; las tablas completas quedan disponibles en \texttt{outputs/tables/}.
+El análisis exploratorio de datos permite describir la distribución empírica antes de proponer un modelo probabilístico. En los materiales del curso se enfatiza que media, mediana, cuartiles, IQR, varianza, desvío estándar, asimetría, curtosis, histograma y boxplot permiten estudiar concentración, variabilidad y valores atípicos \cite{curso_eda,curso_media_varianza}. La Tabla \ref{tab:resumen-descriptivo} resume las medidas principales de la variable \texttt{uyu\_por\_brl}.
 
 \begin{table}[htbp]
 \centering
 \small
 \caption{Resumen descriptivo de la cotización UYU/BRL.}
 \label{tab:resumen-descriptivo}
-\begin{tabular}{lr@{\hspace{1cm}}lr}
+\begin{tabular}{lr@{\hspace{0.8cm}}lr}
 \toprule
 Medida & Valor & Medida & Valor \\
 \midrule
 Media & \MediaCambio{} & Mediana & \MedianaCambio{} \\
+Moda 1 & \ModaCambioUno{} & Moda 2 & \ModaCambioDos{} \\
 Desvío estándar & \DesvioCambio{} & Varianza & \VarianzaCambio{} \\
 Q1 & \QunoCambio{} & Q3 & \QtresCambio{} \\
 IQR & \IqrCambio{} & Outliers IQR & \OutliersCambio{} \\
-Coef. variación & \CoefVariacionCambio{} & Asimetría & \AsimetriaCambio{} \\
+Asimetría & \AsimetriaCambio{} & Curtosis & \CurtosisCambio{} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-La media resume el centro de la distribución, pero no describe por sí sola la variabilidad; por eso se complementa con varianza y desvío estándar, siguiendo el enfoque del curso sobre media y varianza \cite{curso_media_varianza}. El criterio de \(1.5IQR\) no detectó valores atípicos, aunque esto no elimina la presencia de cambios temporales relevantes.
+La media muestral fue \MediaCambio{} UYU/BRL y la mediana fue \MedianaCambio{} UYU/BRL. La muestra presenta dos modas exactas: \ModaCambioUno{} y \ModaCambioDos{} UYU/BRL, ambas con frecuencia \FrecuenciaModaCambio{}. Debido al carácter continuo de la variable y a la precisión decimal de los registros, la moda tiene menor utilidad descriptiva que la media, la mediana y los cuartiles.
+
+El primer cuartil fue \QunoCambio{} y el tercer cuartil fue \QtresCambio{}, por lo que el rango intercuartílico fue \IqrCambio{}. Según el criterio basado en \(Q_1 - 1.5IQR\) y \(Q_3 + 1.5IQR\), se detectaron \OutliersCambio{} posibles valores atípicos. La asimetría positiva indica una cola algo más extendida hacia valores altos, aspecto compatible con la comparación posterior de distribuciones positivas asimétricas.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.82\textwidth]{serie_uyu_por_brl.png}
+    \includegraphics[width=0.84\textwidth]{serie_uyu_por_brl.png}
     \caption{Evolución temporal diaria de la cotización expresada en pesos uruguayos por real brasileño. Fuente: elaboración propia a partir de Yahoo Finance.}
     \label{fig:serie-cambio}
 \end{figure}
 
-La Figura \ref{fig:serie-cambio} evidencia que la cotización no se comporta como una colección de observaciones sin orden. Existen períodos de suba, baja y cambios de nivel. Esta estructura temporal es central: antes de aplicar inferencia clásica, debe considerarse que observaciones próximas en el tiempo pueden estar relacionadas.
+La Figura \ref{fig:serie-cambio} evidencia que la cotización no se comporta como una colección de observaciones sin orden. Existen períodos de suba, baja y cambios de nivel. Esta estructura temporal es central: antes de interpretar intervalos clásicos, debe considerarse que observaciones próximas en el tiempo pueden estar relacionadas.
 
 \begin{figure}[htbp]
     \centering
@@ -48,4 +51,51 @@ La Figura \ref{fig:serie-cambio} evidencia que la cotización no se comporta com
     \label{fig:dist-box}
 \end{figure}
 
-El histograma de la Figura \ref{fig:dist-box} muestra la distribución de frecuencias por clases, tal como se trabaja en el curso para aproximar visualmente la distribución empírica. El boxplot resume mediana, cuartiles y dispersión central. La revisión de retornos y volatilidad se conserva en los archivos generados, pero no se inserta como figura adicional para evitar redundancias en el informe.
+El histograma de la Figura \ref{fig:dist-box} muestra la distribución de frecuencias por clases, tal como se trabaja en el curso para aproximar visualmente la distribución empírica. El boxplot resume mediana, cuartiles y dispersión central. En conjunto, ambas visualizaciones permiten evaluar si una distribución teórica simple puede representar razonablemente los datos.
+
+\section{Análisis temporal y autocorrelación}
+
+Como la variable se observa en el tiempo, la consigna solicita analizar autocorrelación con diferentes rezagos. Para ello se estudia la relación entre \(X_t\) y valores anteriores de la misma serie, como \(X_{t-1}\) y \(X_{t-2}\). Este análisis no constituye una prueba causal, sino una forma de describir dependencia temporal.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.47\textwidth}
+        \includegraphics[width=\textwidth]{lag1_uyu_por_brl.png}
+        \caption{\(X_t\) frente a \(X_{t-1}\)}
+        \label{fig:lag1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.47\textwidth}
+        \includegraphics[width=\textwidth]{lag2_uyu_por_brl.png}
+        \caption{\(X_t\) frente a \(X_{t-2}\)}
+        \label{fig:lag2}
+    \end{subfigure}
+    \caption{Diagramas de dispersión con rezagos de la cotización UYU/BRL. Fuente: elaboración propia a partir de Yahoo Finance.}
+    \label{fig:lags}
+\end{figure}
+
+Los diagramas de la Figura \ref{fig:lags} muestran una relación positiva muy marcada entre la cotización actual y sus valores rezagados. Esto indica que valores cercanos en el tiempo tienden a parecerse, comportamiento habitual en series de cotizaciones.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Autocorrelaciones seleccionadas de la cotización UYU/BRL.}
+\label{tab:acf-cambio}
+\begin{tabular}{rrrrrr}
+\toprule
+Lag 1 & Lag 2 & Lag 5 & Lag 10 & Lag 20 & Lag 30 \\
+\midrule
+\AcfLagUno{} & \AcfLagDos{} & \AcfLagCinco{} & \AcfLagDiez{} & \AcfLagVeinte{} & \AcfLagTreinta{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.76\textwidth]{acf_uyu_por_brl.png}
+    \caption{Función de autocorrelación de la cotización UYU/BRL para rezagos hasta 30. Fuente: elaboración propia a partir de Yahoo Finance.}
+    \label{fig:acf-cambio}
+\end{figure}
+
+Las autocorrelaciones de la Tabla \ref{tab:acf-cambio} son positivas y próximas a uno para los rezagos considerados. Esto indica persistencia temporal: cotizaciones cercanas en el tiempo tienden a presentar valores similares. Esta conclusión es importante porque los procedimientos clásicos de inferencia del curso parten de muestras aleatorias, mientras que aquí se trabaja con una serie histórica.
+
