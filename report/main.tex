@@ -57,6 +57,11 @@
     \fancyhead[R]{\thepage}%
     \renewcommand{\headrulewidth}{0pt}%
 }
+\fancypagestyle{titlepagestyle}{%
+    \fancyhf{}%
+    \fancyhead[R]{\thepage}%
+    \renewcommand{\headrulewidth}{0pt}%
+}
 \renewcommand{\refname}{Referencias}
 \hypersetup{
     colorlinks=true,
@@ -75,7 +80,10 @@
 \pagenumbering{arabic}
 
 \begin{titlepage}
-    \thispagestyle{fancy}
+    \thispagestyle{titlepagestyle}
+    \noindent\includegraphics[width=3.1cm]{figures/logo_utec.png}
+    \vspace{0.7cm}
+
     \centering
     {\Large Universidad Tecnológica del Uruguay (UTEC)\par}
     \vspace{0.12cm}
