@@ -95,16 +95,6 @@ def generate_figures() -> list[str]:
     savefig("scatter_brl_usd_vs_uyu_usd.png")
     generated.append("scatter_brl_usd_vs_uyu_usd.png")
 
-    plt.figure(figsize=(6, 5))
-    corr = df.drop(columns=["fecha"]).corr(numeric_only=True)
-    im = plt.imshow(corr, cmap="coolwarm", vmin=-1, vmax=1)
-    plt.colorbar(im, fraction=0.046, pad=0.04)
-    plt.xticks(range(len(corr.columns)), corr.columns, rotation=45, ha="right", fontsize=7)
-    plt.yticks(range(len(corr.columns)), corr.columns, fontsize=7)
-    plt.title("Matriz de correlacion de variables numericas")
-    savefig("matriz_correlacion.png")
-    generated.append("matriz_correlacion.png")
-
     return generated
 
 

@@ -14,6 +14,7 @@
 - Incorporacion de moda, diagramas con rezagos, autocorrelaciones seleccionadas de la cotizacion UYU/BRL y advertencias sobre dependencia temporal en los intervalos de confianza.
 - Actualizacion del notebook de Google Colab para reproducir el analisis final sin pruebas ajenas al enfoque aprobado ni variables derivadas como eje del proyecto.
 - Ajuste de maquetacion LaTeX: portada corregida, menor espaciado entre flotantes y ubicacion mas compacta de figuras y tablas.
+- Incorporacion del codigo completo del analisis en formato `.py` y `.ipynb`, separado por secciones y sin generar matriz de correlacion.
 - PDF final pendiente de compilacion local u Overleaf porque no hay compilador LaTeX instalado en este entorno.
 
 ## v0.10 - 2026-06-18
