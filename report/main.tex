@@ -1,9 +1,15 @@
 \documentclass[12pt,a4paper]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{iftex}
+\ifPDFTeX
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{newtxtext,newtxmath}
+\else
+    \usepackage{fontspec}
+    \setmainfont{Times New Roman}
+\fi
 \usepackage[spanish,es-tabla]{babel}
-\usepackage{lmodern}
 \usepackage{geometry}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -11,18 +17,23 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{apacite}
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{array}
 \usepackage{xcolor}
 \usepackage[section]{placeins}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
 
-\geometry{margin=2cm}
+\geometry{margin=2.54cm,includehead}
 \graphicspath{{../outputs/figures/}}
-\setstretch{1.02}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.2em}
+\setstretch{1.5}
+\setlength{\parindent}{1.27cm}
+\setlength{\parskip}{0pt}
+\setlength{\headheight}{34pt}
+\setlength{\headsep}{0.35cm}
 \setlength{\floatsep}{6pt plus 1pt minus 1pt}
 \setlength{\textfloatsep}{7pt plus 1pt minus 2pt}
 \setlength{\intextsep}{6pt plus 1pt minus 1pt}
@@ -34,6 +45,19 @@
 \renewcommand{\floatpagefraction}{0.85}
 \captionsetup{font=small,skip=3pt}
 \raggedbottom
+\AtBeginDocument{\RaggedRight}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\includegraphics[height=0.8cm]{figures/logo_utec.png}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{%
+    \fancyhf{}%
+    \fancyhead[L]{\includegraphics[height=0.8cm]{figures/logo_utec.png}}%
+    \fancyhead[R]{\thepage}%
+    \renewcommand{\headrulewidth}{0pt}%
+}
+\renewcommand{\refname}{Referencias}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -48,8 +72,10 @@
 \date{12/06/2026}
 
 \begin{document}
+\pagenumbering{arabic}
 
 \begin{titlepage}
+    \thispagestyle{fancy}
     \centering
     {\Large Universidad Tecnológica del Uruguay (UTEC)\par}
     \vspace{0.12cm}
@@ -64,9 +90,9 @@
     {\large Variable principal: cotización UYU/BRL\par}
     \vspace{0.85cm}
     \begin{tabular}{rl}
-        Integrantes: & Fabrizio Soria \\
-                     & Valentin Zamit \\
-                     & Rafael Rodriguez \\
+        Integrantes: & Fabrizio Soria -- CI: 56539835 \\
+                     & Valentin Zamit -- CI: 56561478 \\
+                     & Rafael Rodriguez -- CI: 56375401 \\
         Fuente de datos: & Yahoo Finance mediante \texttt{yfinance} \\
         Período analizado: & 24/03/2006--29/05/2026 \\
         Año: & 2026 \\
@@ -74,7 +100,6 @@
     \end{tabular}
 \end{titlepage}
 
-\pagenumbering{roman}
 \tableofcontents
 \newpage
 
@@ -87,7 +112,6 @@ La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron medida
 \textbf{Palabras clave:} tipo de cambio, UYU/BRL, serie temporal, inferencia estadística, autocorrelación.
 
 \newpage
-\pagenumbering{arabic}
 
 \input{sections/01_introduccion.tex}
 \input{sections/02_metodologia.tex}
@@ -99,7 +123,7 @@ La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron medida
 \input{sections/08_conclusiones.tex}
 
 \nocite{actividad_final_pye}
-\bibliographystyle{plain}
+\bibliographystyle{apacite}
 \bibliography{references}
 
 \end{document}
