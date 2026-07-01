@@ -1,15 +1,9 @@
 \documentclass[12pt,a4paper]{article}
 
-\usepackage{iftex}
-\ifPDFTeX
-    \usepackage[utf8]{inputenc}
-    \usepackage[T1]{fontenc}
-    \usepackage{newtxtext,newtxmath}
-\else
-    \usepackage{fontspec}
-    \setmainfont{Times New Roman}
-\fi
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish,es-tabla]{babel}
+\usepackage{lmodern}
 \usepackage{geometry}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -17,24 +11,18 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{apacite}
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{array}
 \usepackage{xcolor}
 \usepackage[section]{placeins}
-\usepackage{fancyhdr}
-\usepackage{ragged2e}
-\usepackage{eso-pic}
 
-\geometry{left=2.54cm,right=2.54cm,top=3.85cm,bottom=2.54cm}
+\geometry{margin=2cm}
 \graphicspath{{../outputs/figures/}}
-\setstretch{1.5}
-\setlength{\parindent}{1.27cm}
-\setlength{\parskip}{0pt}
-\setlength{\headheight}{15pt}
-\setlength{\headsep}{0.2cm}
+\setstretch{1.02}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2em}
 \setlength{\floatsep}{6pt plus 1pt minus 1pt}
 \setlength{\textfloatsep}{7pt plus 1pt minus 2pt}
 \setlength{\intextsep}{6pt plus 1pt minus 1pt}
@@ -46,29 +34,6 @@
 \renewcommand{\floatpagefraction}{0.85}
 \captionsetup{font=small,skip=3pt}
 \raggedbottom
-\AtBeginDocument{\RaggedRight}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[R]{\thepage}
-\renewcommand{\headrulewidth}{0pt}
-\fancypagestyle{plain}{%
-    \fancyhf{}%
-    \fancyhead[R]{\thepage}%
-    \renewcommand{\headrulewidth}{0pt}%
-}
-\fancypagestyle{titlepagestyle}{%
-    \fancyhf{}%
-    \fancyhead[R]{\thepage}%
-    \renewcommand{\headrulewidth}{0pt}%
-}
-\AddToShipoutPictureFG{%
-    \AtPageUpperLeft{%
-        \raisebox{-3.35cm}[0pt][0pt]{%
-            \hspace*{2.54cm}\includegraphics[width=4.5cm]{figures/logo_utec_cropped.png}%
-        }%
-    }%
-}
-\renewcommand{\refname}{Referencias}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -83,10 +48,8 @@
 \date{12/06/2026}
 
 \begin{document}
-\pagenumbering{arabic}
 
 \begin{titlepage}
-    \thispagestyle{titlepagestyle}
     \centering
     {\Large Universidad Tecnológica del Uruguay (UTEC)\par}
     \vspace{0.12cm}
@@ -111,6 +74,7 @@
     \end{tabular}
 \end{titlepage}
 
+\pagenumbering{roman}
 \tableofcontents
 \newpage
 
@@ -123,6 +87,7 @@ La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron medida
 \textbf{Palabras clave:} tipo de cambio, UYU/BRL, serie temporal, inferencia estadística, autocorrelación.
 
 \newpage
+\pagenumbering{arabic}
 
 \input{sections/01_introduccion.tex}
 \input{sections/02_metodologia.tex}
@@ -134,7 +99,7 @@ La variable principal del estudio es \texttt{uyu\_por\_brl}. Se aplicaron medida
 \input{sections/08_conclusiones.tex}
 
 \nocite{actividad_final_pye}
-\bibliographystyle{apacite}
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}

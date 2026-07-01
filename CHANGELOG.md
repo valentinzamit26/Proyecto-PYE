@@ -15,7 +15,7 @@
 - Actualizacion del notebook de Google Colab para reproducir el analisis final sin pruebas ajenas al enfoque aprobado ni variables derivadas como eje del proyecto.
 - Ajuste de maquetacion LaTeX: portada corregida, menor espaciado entre flotantes y ubicacion mas compacta de figuras y tablas.
 - Incorporacion del codigo completo del analisis en formato `.py` y `.ipynb`, separado por secciones y sin generar matriz de correlacion.
-- Aplicacion de formato APA 7 solicitado: Times/Times New Roman 12 pt, margen 2,54 cm, interlineado 1,5, alineacion izquierda, referencias APA, logo UTEC en encabezado y cedulas en portada.
+- Restauracion de maquetacion estable sin logo institucional y actualizacion de portada con cedulas de los integrantes.
 - PDF final pendiente de compilacion local u Overleaf porque no hay compilador LaTeX instalado en este entorno.
 
 ## v0.10 - 2026-06-18
